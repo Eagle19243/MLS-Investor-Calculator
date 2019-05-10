@@ -1,0 +1,285 @@
+<div class="modal fade modal-warning" id="mls_popup" aria-hidden="true" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">MLS Investor Calculator</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <label class="font-size-16 font-weight-500 block text-center label-analytics">Subject Property Address</label>
+                    <table class="table table-bordered table-analytics">
+                        <tbody>
+                            <tr>
+                                <td>List Price</td>
+                                <td class="text-right" id="analytics_list_price"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Equity</td>
+                                <td>-</td>
+                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Mortgage</td>
+                                <td>-</td>
+                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td>Mortgage Interest Rage</td>
+                                <td class="text-right"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Mortgage Term - years</td>
+                                <td class="text-right"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td>Number of units</td>
+                                <td class="text-right" id="analytics_number_of_units"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Price per unit</td>
+                                <td class="text-right" id="analytics_price_per_unit"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center">Rent</td>
+                            </tr>
+                            <tr>
+                                <td>UNIT</td>
+                                <td></td>
+                                <td class="text-center">Beds</td>
+                                <td class="text-center">Baths</td>
+                                <td class="text-center">Current</td>
+                            </tr>
+                            <tr>
+                                <td>#1</td>
+                                <td></td>
+                                <td class="text-right" id="analytics_unit_1_beds"></td>
+                                <td class="text-right" id="analytics_unit_1_baths"></td>
+                                <td class="text-right" id="analytics_unit_1_current"></td>
+                            </tr>
+                            <tr>
+                                <td>#2</td>
+                                <td></td>
+                                <td class="text-right" id="analytics_unit_2_beds"></td>
+                                <td class="text-right" id="analytics_unit_2_baths"></td>
+                                <td class="text-right" id="analytics_unit_2_current"></td>
+                            </tr>
+                            <tr>
+                                <td>#3</td>
+                                <td></td>
+                                <td class="text-right" id="analytics_unit_3_beds"></td>
+                                <td class="text-right" id="analytics_unit_3_baths"></td>
+                                <td class="text-right" id="analytics_unit_3_current"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right" id="analytics_unit_total_beds"></td>
+                                <td class="text-right" id="analytics_unit_total_baths"></td>
+                                <td class="text-right" id="analytics_unit_total_current"></td>
+                            </tr>
+                            <tr>
+                                <td>INCOME</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Gross Rents</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_gross_rents"></td>
+                            </tr>
+                            <tr>
+                                <td>Vacancy rate</td>
+                                <td class="text-center" id="analytics_vacancy_rate_percent"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_vacancy_rate"></td>
+                            </tr>
+                            <tr>
+                                <td>Net Rents</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_net_rents"></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td>OPERATING EXPENSES</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Heating</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_heating"></td>
+                            </tr>
+                            <tr>
+                                <td>Gas</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_gas"></td>
+                            </tr>
+                            <tr>
+                                <td>Electricity</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_electricity"></td>
+                            </tr>
+                            <tr>
+                                <td>Water</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_water"></td>
+                            </tr>
+                            <tr>
+                                <td>Repairs & Maintenance</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_repairs"></td>
+                            </tr>
+                            <tr>
+                                <td>Trash Removal</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_trash"></td>
+                            </tr>
+                            <tr>
+                                <td>Sewer</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_sewer"></td>
+                            </tr>
+                            <tr>
+                                <td>Insurance</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_insurance"></td>
+                            </tr>
+                            <tr>
+                                <td>Management</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_management"></td>
+                            </tr>
+                            <tr>
+                                <td>Miscellaneous</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_miscellaneous"></td>
+                            </tr>
+                            <tr>
+                                <td>Total Operating Expenses</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_total"></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td>Net Operating Income(NOI)</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_noi"></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td>Mortgage Principal & Interest</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_mortgage_principal"></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td>Net Cashflow/ROI</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_net_cashflow"></td>
+                            </tr>
+                            <tr>
+                                <td>Cash on Cash Return</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_cash"></td>
+                            </tr>
+                            <tr>
+                                <td>CAP</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right" id="analytics_cap"></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td>Debt Service Cover Ratio</td>
+                                <td class="text-left" id="analytics_debt_service"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-contact">Request to Agent</button>
+                <button type="button" class="btn btn-success btn-export">Export to CSV</button>
+            </div>
+        </div>
+    </div>
+</div>

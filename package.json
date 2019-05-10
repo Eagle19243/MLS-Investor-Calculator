@@ -1,0 +1,22 @@
+{
+  "name": "mls_investor_calculator",
+  "version": "1.0.0",
+  "description": "Automatically pull relevant information from income generating MLS listings. Quickly analyze ROI, NOI, Cash on Cash Return, CAP Rate and Debt Service Coverage Ratio with a click of a button.",
+  "scripts": {
+    "package": "rm *.zip; cd src; zip -r ../mls_investor_calculator.zip *"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eagle19243/MLS-Investor-Calculator.git"
+  },
+  "keywords": [
+    "mls",
+    "investor",
+    "calculator"
+  ],
+  "author": "Eagle19243",
+  "bugs": {
+    "url": "https://github.com/Eagle19243/MLS-Investor-Calculator/issues"
+  },
+  "homepage": "https://github.com/Eagle19243/MLS-Investor-Calculator#readme"
+}

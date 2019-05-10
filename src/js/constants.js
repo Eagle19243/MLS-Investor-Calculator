@@ -1,0 +1,1 @@
+const URLRegex    = /vow.mlspin.com\/clients\/report.aspx/i;
