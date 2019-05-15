@@ -1,7 +1,7 @@
 {
   "name": "MLS Investor Calculator",
   "author": "Eagle19243",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Automatically pull relevant information from income generating MLS listings. Quickly analyze ROI, NOI, Cash on Cash Return, CAP Rate and Debt Service Coverage Ratio with a click of a button.",
   "manifest_version": 2,
   "icons": {
@@ -13,7 +13,8 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "http://vow.mlspin.com/clients/report.aspx*"
+    "http://vow.mlspin.com/clients/report.aspx*",
+    "https://vow.mlspin.com/clients/report.aspx*"
   ],
   "browser_action": {
     "default_icon": "images/icon-48.png",
