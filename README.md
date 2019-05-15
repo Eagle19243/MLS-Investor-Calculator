@@ -11,5 +11,6 @@
 ## Test
 
 - Chrome
-    1. Open `chrome://extensions/` in your Google Chrome, and enable `Developer mode`.
-    2. Click `Load unpacked`, and then choose `src` folder in the presented dialog.
+    1. Extract mls_investor_calculator.zip to specific foler.
+    2. Open `chrome://extensions/` in your Google Chrome, and enable `Developer mode`.
+    3. Click `Load unpacked`, and then choose the extracted folder in the presented dialog.
