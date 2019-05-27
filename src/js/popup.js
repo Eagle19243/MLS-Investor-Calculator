@@ -116,6 +116,7 @@ function populateValues() {
     $('#analytics_insurance').html(getInsurance());
     $('#analytics_management').html(getManagement());
     $('#analytics_miscellaneous').html(getMiscellaneous());
+    $('#analytics_taxes').html(getTaxes());
     $('#analytics_total').html(getTotalExpenses());
     $('#analytics_unit_total_beds').html(getUnitTotalBeds());
     $('#analytics_unit_total_baths').html(getUnitTotalBaths());
@@ -340,6 +341,23 @@ function getMiscellaneous() {
     }
 
     return value.toFixed(2);
+}
+
+function getTaxes() {
+    let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(10) > tbody > tr > td:nth-child(3) > table:nth-child(4) > tbody > tr:nth-child(3) > td > b:nth-child(1)').html().trim();
+    } else if (getURLType() == 1) {
+        content = $('#wrapperTable > div > div > div:nth-child(3) > div.col-sm-6.d-bgcolor--systemLightest > div:nth-child(5) > div > div > div > div:nth-child(6) > div > div > div:nth-child(3) > div > div.col-xs-7.inherit.col-md-8.col-lg-9.d-paddingTop--2.d-paddingBottom--2.d-borderWidthLeft--0.d-borderWidthRight--0.d-borderStyle--solid.d-bordercolor--systemBase.d-borderWidthTop--1.d-borderWidthBottom--0 > span').html().trim();
+    }
+    
+    if (content.length > 0) {
+        value = content.substr(1, content.length - 1);
+    }
+
+    return value;
 }
 
 function getTotalExpenses() {
