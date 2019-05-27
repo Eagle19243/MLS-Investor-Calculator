@@ -106,26 +106,26 @@ function contactToAgent() {
 function populateValues() {
     $('.label-analytics').html(getSubjectPropertyAddress());
     $('#analytics_list_price').html(getListPrice());
-    $('#analytics_heating').html(getHeating());
-    $('#analytics_gas').html(getGas());
-    $('#analytics_electricity').html(getElectricity());
-    $('#analytics_water').html(getWater());
-    $('#analytics_repairs').html(getRepairs());
-    $('#analytics_trash').html(getTrash());
-    $('#analytics_sewer').html(getSewer());
-    $('#analytics_insurance').html(getInsurance());
-    $('#analytics_management').html(getManagement());
-    $('#analytics_miscellaneous').html(getMiscellaneous());
-    $('#analytics_taxes').html(getTaxes());
-    $('#analytics_total').html(getTotalExpenses());
+    $('#analytics_heating').html(formatNumber(getHeating()));
+    $('#analytics_gas').html(formatNumber(getGas()));
+    $('#analytics_electricity').html(formatNumber(getElectricity()));
+    $('#analytics_water').html(formatNumber(getWater()));
+    $('#analytics_repairs').html(formatNumber(getRepairs()));
+    $('#analytics_trash').html(formatNumber(getTrash()));
+    $('#analytics_sewer').html(formatNumber(getSewer()));
+    $('#analytics_insurance').html(formatNumber(getInsurance()));
+    $('#analytics_management').html(formatNumber(getManagement()));
+    $('#analytics_miscellaneous').html(formatNumber(getMiscellaneous()));
+    $('#analytics_taxes').html(formatNumber(getTaxes()));
+    $('#analytics_total').html(formatNumber(getTotalExpenses()));
     $('#analytics_unit_total_beds').html(getUnitTotalBeds());
     $('#analytics_unit_total_baths').html(getUnitTotalBaths());
-    $('#analytics_unit_total_current').html(getUnitTotalCurrent());
+    $('#analytics_unit_total_current').html(formatNumber(getUnitTotalCurrent()));
     $('#analytics_number_of_units').html(getNumberOfUnits());
     $('#analytics_price_per_unit').html(getPricePerUnit());
-    $('#analytics_gross_rents').html(getGrossRents());
+    $('#analytics_gross_rents').html(formatNumber(getGrossRents()));
     $('#analytics_vacancy_rate').html(getVacancyRate());
-    $('#analytics_net_rents').html(getNetRents());
+    $('#analytics_net_rents').html(formatNumber(getNetRents()));
     $('#analytics_noi').html(getNOI());
     $('#analytics_mortgage_principal').html(getMortgagePrincipal());
     $('#analytics_net_cashflow').html(getNetCashflow());
@@ -136,7 +136,7 @@ function populateValues() {
     for (let i = 0; i < getNumberOfUnits(); i++) {
         $(`#analytics_unit_${i + 1}_beds`).html(getBedsForUnit(i));
         $(`#analytics_unit_${i + 1}_baths`).html(getBathsForUnit(i));
-        $(`#analytics_unit_${i + 1}_current`).html(getCurrentForUnit(i));
+        $(`#analytics_unit_${i + 1}_current`).html(formatNumber(getCurrentForUnit(i)));
     }        
 }
 
@@ -354,10 +354,10 @@ function getTaxes() {
     }
     
     if (content.length > 0) {
-        value = content.substr(1, content.length - 1);
+        value = Number(content.substr(1, content.length - 1).replace(',', ''));
     }
 
-    return value;
+    return value.toFixed(2);
 }
 
 function getTotalExpenses() {
@@ -503,7 +503,20 @@ function getPricePerUnit() {
 }
 
 function getGrossRents() {
-    return (getUnitTotalCurrent() * 12).toFixed(2);
+    let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(4) > b').html().trim();
+    }
+    
+    if (content.length > 0) {
+        value = Number(content.substr(1, content.length - 1));
+    } else {
+        value = (getUnitTotalCurrent() * 12).toFixed(2);
+    }
+
+    return value;
 }
 
 function getVacancyRate() {
