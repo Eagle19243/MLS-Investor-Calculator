@@ -10,6 +10,30 @@ async function init() {
 function initEventHandler() {
     $('.btn-contact').click(contactToAgent);
     $('.btn-export').click(exportToXLS);
+    $('#mls_popup').on('hidden.bs.modal', () => {
+        $('.popup-container').css('display', 'none');
+    });
+}
+
+/**
+ * return URLType against current url
+ * 0 : vow.mlspin.com
+ * 1 : stwmls.mlsmatrix.com
+ */
+function getURLType() {
+    const SPINURLRegex      = /vow.mlspin.com\/clients\/report.aspx/i;
+    const MATRIXURLRegex    = /stwmls.mlsmatrix.com\/Matrix\/Public\/Portal.aspx/i;
+    const url = location.href;
+
+    let type = -1;
+
+    if (SPINURLRegex.test(url)) {
+        type = 0;
+    } else if (MATRIXURLRegex.test(url)) {
+        type = 1;
+    }
+
+    return type;
 }
 
 function preparePopup() {
@@ -23,21 +47,48 @@ function preparePopup() {
             $('body').prepend(popupContainer);
     
             popupContainer.load(popupHTMLPath, function(){
+                addUnitElements();
                 resolve();
             });
         }
     });
 }
 
+function addUnitElements() {
+    const numberOfUnits = getNumberOfUnits();
+
+    if (numberOfUnits > 0) {
+        for (let i = numberOfUnits; i > 0; i--) {
+            const unitContent = `<tr> \
+                                    <td>#${i}</td> \
+                                    <td></td> \
+                                    <td class="text-right" id="analytics_unit_${i}_beds"></td> \
+                                    <td class="text-right" id="analytics_unit_${i}_baths"></td> \
+                                    <td class="text-right" id="analytics_unit_${i}_current"></td> \
+                                </tr>`;
+            $('#analytics_units').after(unitContent);
+        }
+    } else {
+        $('#analytics_units').remove();
+    }
+
+}
+
 function showPopup() {
+    $('.popup-container').css('display', 'block');
     $('#mls_popup').modal('show');
 }
 
 function exportToXLS() {
-    $('.table-analytics').table2csv('download', {
-        trimContent: false,
-        filename: `${getMLSNumber()}.csv`
-    });
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.table_to_sheet(document.getElementById('table_analytics'));
+    setFormulas(ws);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${getMLSNumber()}.xlsx`);
+}
+
+function setFormulas(ws) {
+    ws['B10'] = {t: 'n', f: 'B1/B9'}; // Price per unit
 }
 
 function contactToAgent() {
@@ -66,15 +117,6 @@ function populateValues() {
     $('#analytics_management').html(getManagement());
     $('#analytics_miscellaneous').html(getMiscellaneous());
     $('#analytics_total').html(getTotalExpenses());
-    $('#analytics_unit_1_beds').html(getUnitOneBeds());
-    $('#analytics_unit_1_baths').html(getUnitOneBaths());
-    $('#analytics_unit_1_current').html(getUnitOneCurrent());
-    $('#analytics_unit_2_beds').html(getUnitTwoBeds());
-    $('#analytics_unit_2_baths').html(getUnitTwoBaths());
-    $('#analytics_unit_2_current').html(getUnitTwoCurrent());
-    $('#analytics_unit_3_beds').html(getUnitThreeBeds());
-    $('#analytics_unit_3_baths').html(getUnitThreeBaths());
-    $('#analytics_unit_3_current').html(getUnitThreeCurrent());
     $('#analytics_unit_total_beds').html(getUnitTotalBeds());
     $('#analytics_unit_total_baths').html(getUnitTotalBaths());
     $('#analytics_unit_total_current').html(getUnitTotalCurrent());
@@ -89,25 +131,51 @@ function populateValues() {
     $('#analytics_cash').html(getCash());
     $('#analytics_cap').html(getCAP());
     $('#analytics_debt_service').html(getDebtService());
+
+    for (let i = 0; i < getNumberOfUnits(); i++) {
+        $(`#analytics_unit_${i + 1}_beds`).html(getBedsForUnit(i));
+        $(`#analytics_unit_${i + 1}_baths`).html(getBathsForUnit(i));
+        $(`#analytics_unit_${i + 1}_current`).html(getCurrentForUnit(i));
+    }        
 }
 
 function getMLSNumber() {
-    const mlsNumberContent = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(1) > tbody > tr > td > table > tbody > tr:nth-child(1) > td > b').html();
-    const mlsNumber = /\d+/i.exec(mlsNumberContent)[0].trim();
+    let mlsNumber = 0;
+
+    if (getURLType() == 0) {
+        const mlsNumberContent = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(1) > tbody > tr > td > table > tbody > tr:nth-child(1) > td > b').html();
+        mlsNumber = /\d+/i.exec(mlsNumberContent)[0].trim();
+    } else if (getURLType() == 1) {
+        mlsNumber = $('#wrapperTable > div > div > div.row.d-bgcolor--systemLightest.d-marginBottom--8.d-marginTop--6.d-paddingBottom--4 > div:nth-child(1) > div > div:nth-child(3) > span:nth-child(2)').html().trim();
+    }
     
     return mlsNumber;
 }
 
 function getSubjectPropertyAddress() {
-    const address1 = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(1) > b').html().trim();
-    const address2 = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(2) > td:nth-child(1) > b').html().trim();
+    let address1 = '';
+    let address2 = '';
+
+    if (getURLType() == 0) {
+        address1 = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(1) > b').html().trim();
+        address2 = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(2) > td:nth-child(1) > b').html().trim();
+    } else if (getURLType() == 1) {
+        address1 = $('#wrapperTable > div > div > div.row.d-bgcolor--systemLightest.d-marginBottom--8.d-marginTop--6.d-paddingBottom--4 > div:nth-child(1) > div > div.d-mega.d-fontSize--mega.d-color--brandDark.col-sm-12 > span').html().trim();
+        address2 = $('#wrapperTable > div > div > div.row.d-bgcolor--systemLightest.d-marginBottom--8.d-marginTop--6.d-paddingBottom--4 > div:nth-child(1) > div > div.col-sm-12.d-textSoft > span').html().trim();
+    }
 
     return `${address1}, ${address2}`;
 }
 
 function getListPrice() {
-    const listPriceContent = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(2) > b').html();
-    const listPrice = listPriceContent.replace(/(<([^>]+)>)/ig,"").trim();
+    let listPrice = '';
+
+    if (getURLType() == 0) {
+        const listPriceContent = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(2) > b').html();
+        listPrice = listPriceContent.replace(/(<([^>]+)>)/ig,"").trim();
+    } else if (getURLType() == 1) {
+        listPrice = $('#wrapperTable > div > div > div.row.d-bgcolor--systemLightest.d-marginBottom--8.d-marginTop--6.d-paddingBottom--4 > div.col-sm-6.d-borderWidthLeft--1.d-borderWidthTop--0.d-borderWidthBottom--0.d-borderWidthRight--0.d-borderStyle--solid.d-bordercolor--systemBase > div:nth-child(1) > div.col-xs-9 > span.d-text.d-fontSize--largest.d-color--brandDark').html().trim();
+    }
     
     return listPrice;
 }
@@ -124,9 +192,13 @@ function getListPriceNumValue() {
 }
 
 function getHeating() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(1) > b').html().trim();
     let value = 0;
-    
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(1) > b').html().trim();
+    } 
+
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
     }
@@ -135,8 +207,13 @@ function getHeating() {
 }
 
 function getGas() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(1) > b').html().trim();
+
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(1) > b').html().trim();
+    }
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
@@ -146,8 +223,12 @@ function getGas() {
 }
 
 function getElectricity() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(3) > td:nth-child(1) > b').html().trim();
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(3) > td:nth-child(1) > b').html().trim();
+    }
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
@@ -157,8 +238,12 @@ function getElectricity() {
 }
 
 function getWater() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(4) > td:nth-child(1) > b').html().trim();
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(4) > td:nth-child(1) > b').html().trim();
+    }
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
@@ -168,8 +253,12 @@ function getWater() {
 }
 
 function getRepairs() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(2) > b').html().trim();
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(2) > b').html().trim();
+    }
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
@@ -179,15 +268,27 @@ function getRepairs() {
 }
 
 function getTrash() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(2) > b').html().trim();
-    const value = content.substr(1, content.length - 1);
+    let value   = '';
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(2) > b').html().trim();
+    }
+
+    if (content.length > 0) {
+        value = content.substr(1, content.length - 1);
+    }
 
     return (value.length === 0) ? '0.00' : value;
 }
 
 function getSewer() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(3) > td:nth-child(2) > b').html().trim();
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(3) > td:nth-child(2) > b').html().trim();
+    }
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
@@ -197,8 +298,12 @@ function getSewer() {
 }
 
 function getInsurance() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(4) > td:nth-child(2) > b').html().trim();
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(4) > td:nth-child(2) > b').html().trim();
+    }
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
@@ -208,8 +313,12 @@ function getInsurance() {
 }
 
 function getManagement() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(3) > b').html().trim();
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(3) > b').html().trim();
+    }
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
@@ -219,8 +328,12 @@ function getManagement() {
 }
 
 function getMiscellaneous() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(3) > b').html().trim();
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(3) > b').html().trim();
+    }
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
@@ -237,71 +350,124 @@ function getTotalExpenses() {
     return (total === 0) ? '0.00' : total;
 }
 
-function getUnitOneBeds() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9) > tbody > tr:nth-child(2) > td:nth-child(2) > b');
-    let value = 0;
+function getBedsForUnit(index) {
+    let value   = '';
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $(`body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9) > tbody > tr:nth-child(${2 + index * 3}) > td:nth-child(2) > b`);
+    } else if (getURLType() == 1) {
+        if (index == 0) {
+            content = $('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(3) > td:nth-child(4) > span.wrapped-field');
+        } else {
+            content = $($('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(4) > span.wrapped-field')[index - 1]);
+        }
+    }
     
     if (content.length > 0) {
-        value = Number(content.html().trim());
+        value = content.html().trim();
     }
     
     return value;
 }
 
-function getUnitOneBaths() {
-    return 0;
-}
+function getBathsForUnit(index) {
+    let value   = '';
+    let content = '';
 
-function getUnitOneCurrent() {
-    return 0;
-}
+    if (getURLType() == 0) {
+        content = $(`body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9) > tbody > tr:nth-child(${2 + index * 3}) > td:nth-child(3) > b`);
+        if (content.length > 0) {
+            value = content.html().trim();
+        }
+    } else if (getURLType() == 1) {
+        let fullBaths = '';
+        let halfBaths = '';
 
-function getUnitTwoBeds() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9) > tbody > tr:nth-child(10) > td:nth-child(2) > b');
-    let value = 0;
-    
-    if (content.length > 0) {
-        value = Number(content.html().trim());
+        if (index == 0) {
+            fullBaths = $('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(3) > td:nth-child(6) > span.wrapped-field');
+            halfBaths = $('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(3) > td:nth-child(8) > span.wrapped-field');
+        } else {
+            fullBaths = $($('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(6) > span.wrapped-field')[index - 1]);
+            halfBaths = $($('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(8) > span.wrapped-field')[index - 1]);
+        }
+
+        if (fullBaths.length > 0) {
+            value += `${fullBaths.html().trim()}f`;
+        }
+
+        if (halfBaths.length > 0) {
+            value += ` ${halfBaths.html().trim()}h`;
+        }
     }
     
     return value;
 }
 
-function getUnitTwoBaths() {
-    return 0;
-}
+function getCurrentForUnit(index) {
+    let value   = '';
+    let content = '';
 
-function getUnitTwoCurrent() {
-    return 0;
-}
+    if (getURLType() == 0) {
+        content = $(`body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9) > tbody > tr:nth-child(${2 + index * 3}) > td:nth-child(7) > b`);
+    } else if (getURLType() == 1) {
+        if (index == 0) {
+            content = $('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(3) > td:nth-child(11) > span.wrapped-field');
+        } else {
+            content = $($('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(11) > span.wrapped-field')[index - 1]);
+        }
+    }
+    
+    if (content.length > 0) {
+        value = content.html().trim();
 
-function getUnitThreeBeds() {
-    return 0;
-}
-
-function getUnitThreeBaths() {
-    return 0;
-}
-
-function getUnitThreeCurrent() {
-    return 0;
+        if (getURLType() == 1) {
+            value = value.substr(1, value.length - 1);
+        }
+    }
+    
+    return value;
 }
 
 function getUnitTotalBeds() {
-    return getUnitOneBeds() + getUnitTwoBeds() + getUnitThreeBeds();
+    let value = 0;
+
+    for (let i = 0; i < getNumberOfUnits(); i++) {
+        value += Number(getBedsForUnit(i));
+    }
+
+    return value;
 }
 
 function getUnitTotalBaths() {
-    return getUnitOneBaths() + getUnitTwoBaths() + getUnitThreeBaths();
+    let value = 0;
+
+    for (let i = 0; i < getNumberOfUnits(); i++) {
+        value += Number(getBathsForUnit(i));
+    }
+
+    return value;
 }
 
 function getUnitTotalCurrent() {
-    return getUnitOneCurrent() + getUnitTwoCurrent() + getUnitThreeCurrent();
+    let value = 0;
+
+    for (let i = 0; i < getNumberOfUnits(); i++) {
+        value += Number(getCurrentForUnit(i).replace(',', ''));
+    }
+
+    return value;
 }
 
 function getNumberOfUnits() {
-    const content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(6) > td:nth-child(1) > b');
     let value = 0;
+    let content = '';
+
+    if (getURLType() == 0) {
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(6) > td:nth-child(1) > b');
+    } else if (getURLType() == 1) {
+        content = $('#wrapperTable > div > div > div.row.d-bgcolor--systemLightest.d-marginBottom--8.d-marginTop--6.d-paddingBottom--4 > div.col-sm-6.d-borderWidthLeft--1.d-borderWidthTop--0.d-borderWidthBottom--0.d-borderWidthRight--0.d-borderStyle--solid.d-bordercolor--systemBase > div:nth-child(2) > div.col-xs-12.col-sm-8 > div:nth-child(1) > div > div > div:nth-child(1) > span.d-text.d-paddingRight--5.d-fontWeight--bold');
+    }
     
     if (content.length > 0) {
         value = Number(content.html().trim());
@@ -331,9 +497,7 @@ function getNetRents() {
     return (getGrossRents() - getVacancyRate()).toFixed(2);
 }
 
-function getNOI() {function formatNumber(num) {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-  }
+function getNOI() {
     return 0;
 }
 
@@ -366,6 +530,7 @@ function getDebtService() {
 }
 
 function formatNumber(num) {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
+
 

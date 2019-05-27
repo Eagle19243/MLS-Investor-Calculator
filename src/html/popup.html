@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class="table-responsive">
                     <label class="font-size-16 font-weight-500 block text-center label-analytics">Subject Property Address</label>
-                    <table class="table table-bordered table-analytics">
+                    <table class="table table-bordered table-analytics" id="table_analytics">
                         <tbody>
                             <tr>
                                 <td>List Price</td>
@@ -78,33 +78,12 @@
                                 <td></td>
                                 <td class="text-center">Rent</td>
                             </tr>
-                            <tr>
+                            <tr id="analytics_units">
                                 <td>UNIT</td>
                                 <td></td>
                                 <td class="text-center">Beds</td>
                                 <td class="text-center">Baths</td>
                                 <td class="text-center">Current</td>
-                            </tr>
-                            <tr>
-                                <td>#1</td>
-                                <td></td>
-                                <td class="text-right" id="analytics_unit_1_beds"></td>
-                                <td class="text-right" id="analytics_unit_1_baths"></td>
-                                <td class="text-right" id="analytics_unit_1_current"></td>
-                            </tr>
-                            <tr>
-                                <td>#2</td>
-                                <td></td>
-                                <td class="text-right" id="analytics_unit_2_beds"></td>
-                                <td class="text-right" id="analytics_unit_2_baths"></td>
-                                <td class="text-right" id="analytics_unit_2_current"></td>
-                            </tr>
-                            <tr>
-                                <td>#3</td>
-                                <td></td>
-                                <td class="text-right" id="analytics_unit_3_beds"></td>
-                                <td class="text-right" id="analytics_unit_3_baths"></td>
-                                <td class="text-right" id="analytics_unit_3_current"></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -278,7 +257,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary btn-contact">Request to Agent</button>
-                <button type="button" class="btn btn-success btn-export">Export to CSV</button>
+                <button type="button" class="btn btn-success btn-export">Export to Excel</button>
             </div>
         </div>
     </div>

@@ -14,7 +14,9 @@
     "activeTab",
     "tabs",
     "http://vow.mlspin.com/clients/report.aspx*",
-    "https://vow.mlspin.com/clients/report.aspx*"
+    "https://vow.mlspin.com/clients/report.aspx*",
+    "http://stwmls.mlsmatrix.com/Matrix/Public/Portal.aspx*",
+    "https://stwmls.mlsmatrix.com/Matrix/Public/Portal.aspx*"
   ],
   "browser_action": {
     "default_icon": "images/icon-48.png",

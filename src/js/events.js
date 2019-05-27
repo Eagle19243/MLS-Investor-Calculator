@@ -5,7 +5,7 @@ function _onBrowserActionClicked(tab) {
         return;
     }
     
-    if (URLRegex.test(tab.url)) {
+    if (SPINURLRegex.test(tab.url) || MATRIXURLRegex.test(tab.url)) {
         injectFiles(tab);
     } else {
         // show alert message
