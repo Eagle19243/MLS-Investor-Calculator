@@ -16,17 +16,3 @@ function injectFiles(tab) {
     chrome.tabs.executeScript(tab.id, { file: 'vendor/table2csv/table2csv.min.js' });
     chrome.tabs.executeScript(tab.id, { file: 'js/popup.js' });
 }
-
-// Make extension enabled/disabled for a URL
-function determineAvailability(tab) {
-    if (!tab.url) {
-        disableExtension();
-    }
-    
-    if (URLRegex.test(tab.url)) {
-        enableExtension();
-        injectFiles(tab);
-    } else {
-        disableExtension();
-    }
-}

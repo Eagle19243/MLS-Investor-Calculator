@@ -1,18 +1,19 @@
-window.onload = function() {
-    preparePopup().then(() => {
-        showPopup();
-        populateValues();
-        initEventHandler();
-    });
+init();
+
+async function init() {
+    await preparePopup();
+    showPopup();
+    populateValues();
+    initEventHandler();
 }
 
 function initEventHandler() {
     $('.btn-contact').click(contactToAgent);
-    $('.btn-export').click(exportToCSV);
+    $('.btn-export').click(exportToXLS);
 }
 
 function preparePopup() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         if ($('.popup-container').length) {
             resolve();
         } else {
@@ -32,7 +33,7 @@ function showPopup() {
     $('#mls_popup').modal('show');
 }
 
-function exportToCSV() {
+function exportToXLS() {
     $('.table-analytics').table2csv('download', {
         trimContent: false,
         filename: `${getMLSNumber()}.csv`
