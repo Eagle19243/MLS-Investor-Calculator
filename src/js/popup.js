@@ -384,9 +384,9 @@ function getTaxes() {
 function getTotalExpenses() {
     const total = Number(getHeating()) + Number(getGas()) + Number(getElectricity()) +
         Number(getWater()) + Number(getRepairs()) + Number(getTrash()) + Number(getSewer()) +
-        Number(getInsurance()) + Number(getManagement()) + Number(getMiscellaneous());
+        Number(getInsurance()) + Number(getManagement()) + Number(getMiscellaneous()) + Number(getTaxes());
 
-    return (total === 0) ? '0.00' : total;
+    return (total === 0) ? '0.00' : total.toFixed(2);
 }
 
 function getBedsForUnit(index) {
@@ -394,7 +394,7 @@ function getBedsForUnit(index) {
     let content = '';
 
     if (getURLType() == 0) {
-        content = $(`body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9) > tbody > tr:nth-child(${2 + index * 3}) > td:nth-child(2) > b`);
+        content = $($('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9)').find('td:contains("Bedrooms") > b')[index]);
     } else if (getURLType() == 1) {
         if (index == 0) {
             content = $('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(3) > td:nth-child(4) > span.wrapped-field');
@@ -415,7 +415,7 @@ function getBathsForUnit(index) {
     let content = '';
 
     if (getURLType() == 0) {
-        content = $(`body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9) > tbody > tr:nth-child(${2 + index * 3}) > td:nth-child(3) > b`);
+        content = $($('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9)').find('td:contains("Baths") > b')[index]);
         if (content.length > 0) {
             value = content.html().trim();
         }
@@ -448,7 +448,7 @@ function getCurrentForUnit(index) {
     let content = '';
 
     if (getURLType() == 0) {
-        content = $(`body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9) > tbody > tr:nth-child(${2 + index * 3}) > td:nth-child(7) > b`);
+        content = $($('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9)').find('td:contains("Rent:") > b')[index]);
     } else if (getURLType() == 1) {
         if (index == 0) {
             content = $('.DisplayRow > tbody > tr > td > table > tbody > tr:nth-child(3) > td:nth-child(11) > span.wrapped-field');
@@ -503,11 +503,11 @@ function getNumberOfUnits() {
     let content = '';
 
     if (getURLType() == 0) {
-        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(6) > td:nth-child(1) > b');
+        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2)').find('td:contains("Total Units") > b');
     } else if (getURLType() == 1) {
         content = $('#wrapperTable > div > div > div.row.d-bgcolor--systemLightest.d-marginBottom--8.d-marginTop--6.d-paddingBottom--4 > div.col-sm-6.d-borderWidthLeft--1.d-borderWidthTop--0.d-borderWidthBottom--0.d-borderWidthRight--0.d-borderStyle--solid.d-bordercolor--systemBase > div:nth-child(2) > div.col-xs-12.col-sm-8 > div:nth-child(1) > div > div > div:nth-child(1) > span.d-text.d-paddingRight--5.d-fontWeight--bold');
     }
-    
+
     if (content.length > 0) {
         value = Number(content.html().trim());
     }
