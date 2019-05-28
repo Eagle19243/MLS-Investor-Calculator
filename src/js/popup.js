@@ -204,7 +204,7 @@ function getListPrice() {
 
 function getListPriceNumValue() {
     let listPrice = getListPrice();
-    listPrice = Number(listPrice.substr(1, listPrice.length - 1).replace(',', ''));
+    listPrice = Number(listPrice.substr(1, listPrice.length - 1).replace(/,/g, ''));
 
     if (!listPrice) {
         return 0;
@@ -375,7 +375,7 @@ function getTaxes() {
     }
     
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1).replace(',', ''));
+        value = Number(content.substr(1, content.length - 1).replace(/,/g, ''));
     }
 
     return value.toFixed(2);
@@ -492,7 +492,7 @@ function getUnitTotalCurrent() {
     let value = 0;
 
     for (let i = 0; i < getNumberOfUnits(); i++) {
-        value += Number(getCurrentForUnit(i).replace(',', ''));
+        value += Number(getCurrentForUnit(i).replace(/,/g, ''));
     }
 
     return value;
@@ -519,6 +519,9 @@ function getPricePerUnit() {
     if (getNumberOfUnits() === 0) {
         return '';
     }
+
+    console.log(getListPriceNumValue());
+    console.log(getNumberOfUnits());
 
     return '$' + formatNumber(parseInt(getListPriceNumValue() / getNumberOfUnits()));
 }
