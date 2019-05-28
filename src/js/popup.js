@@ -88,7 +88,28 @@ function exportToXLS() {
 }
 
 function setFormulas(ws) {
+    const numberOfUnits = getNumberOfUnits();
+
     ws['B10'] = {t: 'n', f: 'B1/B9'}; // Price per unit
+    ws[`C${14 + numberOfUnits}`] = {t: 'n', f: `SUM(C14:C${14 + numberOfUnits - 1})`}; // Total Beds
+    ws[`D${14 + numberOfUnits}`] = {t: 'n', f: `SUM(D14:D${14 + numberOfUnits - 1})`}; // Total Baths
+    ws[`E${14 + numberOfUnits}`] = {t: 'n', f: `SUM(E14:E${14 + numberOfUnits - 1})`}; // Total Current
+
+    if (getGrossRents() == (getUnitTotalCurrent() * 12).toFixed(2)) {
+        ws[`E${16 + numberOfUnits}`] = {t: 'n', f: `E${14 + numberOfUnits}*12`}; // Gross Rents    
+    }
+
+    ws[`E${17 + numberOfUnits}`] = {t: 'n', f: `B${17 + numberOfUnits}*E${16 + numberOfUnits}`}; // Vacancy Rate
+    ws[`E${18 + numberOfUnits}`] = {t: 'n', f: `E${16 + numberOfUnits}-E${17 + numberOfUnits}`}; // Net Rents
+    ws[`E${25 + numberOfUnits}`] = {t: 'n', f: `E${18 + numberOfUnits}*B${25 + numberOfUnits}`}; // Repairs & Maintenance
+    ws[`E${29 + numberOfUnits}`] = {t: 'n', f: `E${18 + numberOfUnits}*B${29 + numberOfUnits}`}; // Management
+    ws[`E${32 + numberOfUnits}`] = {t: 'n', f: `SUM(E${21 + numberOfUnits}:E${31 + numberOfUnits})`}; // Total Operating Expenses
+
+    ws[`E${38 + numberOfUnits}`] = {t: 'n', f: `E${34 + numberOfUnits}-E${36 + numberOfUnits}`}; // Net Cashflow/ROI
+    ws[`E${39 + numberOfUnits}`] = {t: 'n', f: `E${38 + numberOfUnits}/1`}; // Cash on Cash Return
+    ws[`E${40 + numberOfUnits}`] = {t: 'n', f: `E${34 + numberOfUnits}/B1`}; // CAP
+
+    ws[`B${42 + numberOfUnits}`] = {t: 'n', f: `E${34 + numberOfUnits}/E${36 + numberOfUnits}`}; // Cash on Cash Return
 }
 
 function contactToAgent() {
@@ -512,7 +533,9 @@ function getGrossRents() {
     
     if (content.length > 0) {
         value = Number(content.substr(1, content.length - 1));
-    } else {
+    } 
+
+    if (value == 0) {
         value = (getUnitTotalCurrent() * 12).toFixed(2);
     }
 
