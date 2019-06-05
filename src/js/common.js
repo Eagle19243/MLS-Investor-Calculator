@@ -14,5 +14,6 @@ function injectFiles(tab) {
     chrome.tabs.executeScript(tab.id, { file: 'vendor/jquery/jquery.min.js' });
     chrome.tabs.executeScript(tab.id, { file: 'vendor/bootstrap/bootstrap.min.js' });
     chrome.tabs.executeScript(tab.id, { file: 'vendor/js-xlsx/xlsx.full.min.js' });
+    chrome.tabs.executeScript(tab.id, { file: 'vendor/editabletable/editabletable.js' });
     chrome.tabs.executeScript(tab.id, { file: 'js/popup.js' });
 }

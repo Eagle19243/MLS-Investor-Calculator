@@ -13,123 +13,136 @@
                     <table class="table table-bordered table-analytics" id="table_analytics">
                         <tbody>
                             <tr>
-                                <td>List Price</td>
-                                <td class="text-right" id="analytics_list_price"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td readonly>List Price</td>
+                                <td class="text-right" id="analytics_list_price" readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
                             </tr>
                             <tr>
-                                <td>Equity</td>
-                                <td>-</td>
-                                <td class="text-center"></td>
-                                <td></td>
-                                <td></td>
+                                <td readonly>Equity</td>
+                                <td class="text-right" id="analytics_equity" readonly></td>
+                                <td class="text-right bg-purple" id="analytics_equity_percent"></td>
+                                <td readonly></td>
+                                <td readonly></td>
                             </tr>
                             <tr>
-                                <td>Mortgage</td>
-                                <td>-</td>
-                                <td class="text-center"></td>
-                                <td></td>
-                                <td></td>
+                                <td readonly>Mortgage</td>
+                                <td class="text-right" id="analytics_mortgage" readonly></td>
+                                <td class="text-right bg-purple" id="analytics_mortgage_percent" readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td class="text-center">&nbsp;</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr></tr>
-                            <tr>
-                                <td>Mortgage Interest Rage</td>
-                                <td class="text-right"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Mortgage Term - years</td>
-                                <td class="text-right"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly>&nbsp;</td>
+                                <td readonly></td>
+                                <td readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
-                                <td>Number of units</td>
-                                <td class="text-right" id="analytics_number_of_units"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td readonly>Mortgage Interest Rage</td>
+                                <td class="text-right bg-purple">5.000%</td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
                             </tr>
                             <tr>
-                                <td>Price per unit</td>
-                                <td class="text-right" id="analytics_price_per_unit"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td readonly>Mortgage Term - years</td>
+                                <td class="text-right bg-purple">25</td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="font-weight-700 text-center">Rent</td>
+                                <td readonly>Number of units</td>
+                                <td class="text-right" id="analytics_number_of_units" readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                            </tr>
+                            <tr>
+                                <td readonly>Price per unit</td>
+                                <td class="text-right" id="analytics_price_per_unit" readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td class="font-weight-700 text-center" readonly>Rent</td>
                             </tr>
                             <tr id="analytics_units">
-                                <td class="font-weight-700">UNIT</td>
-                                <td></td>
-                                <td class="font-weight-700 text-center">Beds</td>
-                                <td class="font-weight-700 text-center">Baths</td>
-                                <td class="font-weight-700 text-center">Current</td>
+                                <td class="font-weight-700" readonly>UNIT</td>
+                                <td readonly></td>
+                                <td class="font-weight-700 text-center" readonly>Beds</td>
+                                <td class="font-weight-700 text-center" readonly>Baths</td>
+                                <td class="font-weight-700 text-center" readonly>Current</td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right" id="analytics_unit_total_beds"></td>
-                                <td class="text-right" id="analytics_unit_total_baths"></td>
-                                <td class="text-right" id="analytics_unit_total_current"></td>
+                                <td class="text-right thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top font-weight-700" id="analytics_unit_total_beds" readonly></td>
+                                <td class="text-right thick-line-top font-weight-700" id="analytics_unit_total_baths" readonly></td>
+                                <td class="text-right thick-line-top font-weight-700" id="analytics_unit_total_current" readonly></td>
                             </tr>
                             <tr>
-                                <td class="font-weight-700">INCOME</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td class="font-weight-700" readonly>INCOME</td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
                             </tr>
                             <tr>
-                                <td>Gross Rents</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_gross_rents"></td>
+                                <td readonly>Gross Rents from MLS</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_gross_rents_mls" readonly></td>
                             </tr>
                             <tr>
-                                <td>Vacancy rate</td>
-                                <td class="text-center" id="analytics_vacancy_rate_percent"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_vacancy_rate"></td>
+                                <td readonly>Gross Rents Addition</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_gross_rents_addition" readonly></td>
                             </tr>
                             <tr>
-                                <td class="thick-line-top">Net Rents</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_net_rents"></td>
-                            </tr>
-                            <tr></tr>
-                            <tr>
-                                <td class="font-weight-700">OPERATING EXPENSES</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td readonly>Vacancy rate</td>
+                                <td class="text-right  bg-purple" id="analytics_vacancy_rate_percent"></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_vacancy_rate" readonly></td>
                             </tr>
                             <tr>
-                                <td>Heating</td>
+                                <td class="thick-line-top font-weight-700" readonly>Net Rents</td>
+                                <td class="text-center thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top font-weight-700" id="analytics_net_rents" readonly></td>
+                            </tr>
+                            <tr>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly>&nbsp;</td>
+                                <td readonly></td>
+                                <td readonly></td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-700" readonly>OPERATING EXPENSES</td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                                <td readonly></td>
+                            </tr>
+                            <tr>
+                                <td readonly>Heating</td>
                                 <td class="text-center"></td>
                                 <td class="text-right"></td>
                                 <td class="text-right"></td>
@@ -137,126 +150,126 @@
                             </tr>
                             <tr>
                                 <td>Gas</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_gas"></td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_gas" readonly></td>
                             </tr>
                             <tr>
-                                <td>Electricity</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_electricity"></td>
+                                <td readonly>Electricity</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_electricity" readonly></td>
                             </tr>
                             <tr>
-                                <td>Water</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_water"></td>
+                                <td readonly>Water</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_water" readonly></td>
                             </tr>
                             <tr>
-                                <td>Repairs & Maintenance</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_repairs"></td>
+                                <td readonly>Repairs & Maintenance</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_repairs" readonly></td>
                             </tr>
                             <tr>
-                                <td>Trash Removal</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_trash"></td>
+                                <td readonly>Trash Removal</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_trash" readonly></td>
                             </tr>
                             <tr>
-                                <td>Sewer</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_sewer"></td>
+                                <td readonly>Sewer</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_sewer" readonly></td>
                             </tr>
                             <tr>
-                                <td>Insurance</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_insurance"></td>
+                                <td readonly>Insurance</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_insurance" readonly></td>
                             </tr>
                             <tr>
-                                <td>Management</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_management"></td>
+                                <td readonly>Management</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_management" readonly></td>
                             </tr>
                             <tr>
-                                <td>Miscellaneous</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_miscellaneous"></td>
+                                <td readonly>Miscellaneous</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_miscellaneous" readonly></td>
                             </tr>
                             <tr>
-                                <td>Taxes</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_taxes"></td>
+                                <td readonly>Taxes</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_taxes" readonly></td>
                             </tr>
                             <tr>
-                                <td class="font-weight-700 text-center thick-line-top">Total Operating Expenses</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_total"></td>
-                            </tr>
-                            <tr></tr>
-                            <tr>
-                                <td class="font-weight-700">Net Operating Income(NOI)</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_noi"></td>
+                                <td class="font-weight-700 text-center thick-line-top" readonly>Total Operating Expenses</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_total" readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
-                                <td class="font-weight-700">Mortgage Principal & Interest</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_mortgage_principal"></td>
+                                <td class="font-weight-700" readonly>Net Operating Income(NOI)</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_noi" readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
-                                <td class="font-weight-700">Net Cashflow/ROI</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_net_cashflow"></td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-700">Cash on Cash Return</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_cash"></td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-700">CAP</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_cap"></td>
+                                <td class="font-weight-700" readonly>Mortgage Principal & Interest</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_mortgage_principal" readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
-                                <td class="font-weight-700">Debt Service Cover Ratio</td>
-                                <td class="text-left" id="analytics_debt_service"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
+                                <td class="font-weight-700" readonly>Net Cashflow/ROI</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_net_cashflow" readonly></td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-700" readonly>Cash on Cash Return</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_cash" readonly></td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-700" readonly>CAP</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_cap" readonly></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td class="font-weight-700" readonly>Debt Service Cover Ratio</td>
+                                <td class="text-left" id="analytics_debt_service" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
                             </tr>
                         </tbody>
                     </table>
