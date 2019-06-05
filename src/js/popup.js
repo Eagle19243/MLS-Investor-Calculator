@@ -634,7 +634,7 @@ function getCash() {
         return '';
     }
 
-    return (getNetCashflow() / getEquity()).toFixed(2) + '%';
+    return (getNetCashflow() / getEquity() * 100).toFixed(2) + '%';
 }
 
 function getCAP() {
@@ -642,7 +642,7 @@ function getCAP() {
         return '';
     }
 
-    return (getNOI() / getListPriceNumValue()).toFixed(2) + '%';
+    return (getNOI() / getListPriceNumValue() * 100).toFixed(2) + '%';
 }
 
 function getDebtService() {
@@ -745,6 +745,7 @@ function setFormulas(ws) {
     const formatCurrency        = '$#,##0';
     const formatCurrencyWithDec = '$#,##0.00';
     const formatPercent         = '0%';
+    const formatPercentWithDec  = '0.00%';
 
     // List Price
     ws[cListPrice].z       = formatCurrency;
@@ -846,17 +847,163 @@ function setFormulas(ws) {
     ws[`D${19 + numberOfUnits}`].s = {
         border: borderTop
     };
+
+    // Heating
+    ws[cHeating].z = formatCurrencyWithDec;
+    if (ws[cHeating].v === '$0.00') {
+        ws[cHeating].s = { fill: bgYellow, border: borderOutsideBox };
+    }
+
+    // Gas
+    ws[cGas].z = formatCurrencyWithDec;
+    if (ws[cGas].v === '$0.00') {
+        ws[cGas].s = { fill: bgYellow, border: borderOutsideBox };
+    }
+
+    // Electricity
+    ws[cElectricity].z = formatCurrencyWithDec;
+    if (ws[cElectricity].v === '$0.00') {
+        ws[cElectricity].s = { fill: bgYellow, border: borderOutsideBox };
+    }
+
+    // Water
+    ws[cWater].z = formatCurrencyWithDec;
+    if (ws[cWater].v === '$0.00') {
+        ws[cWater].s = { fill: bgYellow, border: borderOutsideBox };
+    }
+
+    // Repairs & Maintenance
+    ws[cRepair].z = formatCurrencyWithDec;
+    ws[cRepair].f = `${cRepairPercent}*${cNetRents}`;
+    ws[cRepairPercent].z = formatPercent;
+    ws[cRepairPercent].s = { fill: bgPurple };
+
+    // Trash Removal
+    ws[cTrashRemoval].z = formatCurrencyWithDec;
+    if (ws[cTrashRemoval].v === '$0.00') {
+        ws[cTrashRemoval].s = { fill: bgYellow, border: borderOutsideBox };
+    }
+
+    // Sewer
+    ws[cSewer].z = formatCurrencyWithDec;
+    if (ws[cSewer].v === '$0.00') {
+        ws[cSewer].s = { fill: bgYellow, border: borderOutsideBox };
+    }
+
+    // Insurance
+    ws[cInsurance].z = formatCurrencyWithDec;
+    if (ws[cInsurance].v === '$0.00') {
+        ws[cInsurance].s = { fill: bgYellow, border: borderOutsideBox };
+    }
+
+    // Repairs & Maintenance
+    ws[cManagement].z = formatCurrencyWithDec;
+    ws[cManagement].f = `${cManagementPercent}*${cNetRents}`;
+    ws[cManagementPercent].z = formatPercent;
+    ws[cManagementPercent].s = { fill: bgPurple };
+
+    // Miscellaneous
+    ws[cMiscellaneous].z = formatCurrencyWithDec;
+    if (ws[cMiscellaneous].v === '$0.00') {
+        ws[cMiscellaneous].s = { fill: bgYellow, border: borderOutsideBox };
+    }
+
+    // Taxes
+    ws[cTaxes].z = formatCurrencyWithDec;
+    if (ws[cTaxes].v === '$0.00') {
+        ws[cTaxes].s = { fill: bgYellow, border: borderOutsideBox };
+    }
     
-    // hereend
-    ws[`E${25 + numberOfUnits}`] = {t: 'n', f: `E${18 + numberOfUnits}*B${25 + numberOfUnits}`}; // Repairs & Maintenance
-    ws[`E${29 + numberOfUnits}`] = {t: 'n', f: `E${18 + numberOfUnits}*B${29 + numberOfUnits}`}; // Management
-    ws[`E${32 + numberOfUnits}`] = {t: 'n', f: `SUM(E${21 + numberOfUnits}:E${31 + numberOfUnits})`}; // Total Operating Expenses
+    // Total Operating Expenses
+    ws[cTotalExpenses].z = formatCurrencyWithDec;
+    ws[cTotalExpenses].f = `SUM(${cHeating}:${cTaxes})`;
+    ws[cTotalExpenses].s = {
+        font: fontBold,
+        border: borderTop
+    };
+    ws[`A${33 + numberOfUnits}`].s = {
+        font: fontBold,
+        border: borderTop
+    };
+    ws[`B${33 + numberOfUnits}`].s = {
+        border: borderTop
+    };
+    ws[`C${33 + numberOfUnits}`].s = {
+        border: borderTop
+    };
+    ws[`D${33 + numberOfUnits}`].s = {
+        border: borderTop
+    };
 
-    ws[`E${38 + numberOfUnits}`] = {t: 'n', f: `E${34 + numberOfUnits}-E${36 + numberOfUnits}`}; // Net Cashflow/ROI
-    ws[`E${39 + numberOfUnits}`] = {t: 'n', f: `E${38 + numberOfUnits}/1`}; // Cash on Cash Return
-    ws[`E${40 + numberOfUnits}`] = {t: 'n', f: `E${34 + numberOfUnits}/B1`}; // CAP
+    // Net Operating Income(NOI)
+    ws[cNOI].z = formatCurrencyWithDec;
+    ws[cNOI].f = `${cNetRents}-${cTotalExpenses}`;
+    ws[cNOI].s = {
+        font: fontBold
+    };
+    ws[`A${35 + numberOfUnits}`].s = {
+        font: fontBold
+    };
 
-    ws[`B${42 + numberOfUnits}`] = {t: 'n', f: `E${34 + numberOfUnits}/E${36 + numberOfUnits}`}; // Cash on Cash Return
+    // Mortgage Principal & Interest
+    ws[cMortgagePrincipal].z = formatCurrencyWithDec;
+    ws[cMortgagePrincipal].f = `${cMonthlyPI}*12`;
+    ws[cMortgagePrincipal].s = {
+        font: fontBold
+    };
+    ws[`A${37 + numberOfUnits}`].s = {
+        font: fontBold
+    };
+
+    // Monthly PI Payment
+    ws[cMonthlyPI].z = formatCurrencyWithDec;
+    ws[cMonthlyPI].f = `((((1+(${cMortgageInterest}/12))^(${cMortgageTerm}*12))*(${cMortgageInterest}/12))/(((1+(${cMortgageInterest}/12))^(${cMortgageTerm}*12))-1))*${cMortgageValue}`;
+    ws[cMonthlyPI].s = {
+        font: fontBold
+    };
+    ws[`A${38 + numberOfUnits}`].s = {
+        font: fontBold
+    };
+
+    // Net Cashflow/ROI
+    ws[cNetCashflow].z = formatCurrencyWithDec;
+    ws[cNetCashflow].f = `${cNOI}-${cMortgagePrincipal}`;
+    ws[cNetCashflow].s = {
+        font: fontBold
+    };
+    ws[`A${40 + numberOfUnits}`].s = {
+        font: fontBold
+    };
+
+    // Cash on Cash Return
+    ws[cCashOnCashReturn].z = formatPercentWithDec;
+    ws[cCashOnCashReturn].f = `${cNetCashflow}/${cEquityValue}`;
+    ws[cCashOnCashReturn].s = {
+        font: fontBold
+    };
+    ws[`A${41 + numberOfUnits}`].s = {
+        font: fontBold
+    };
+
+    // CAP
+    ws[cCAP].z = formatPercentWithDec;
+    ws[cCAP].f = `${cNOI}/${cListPrice}`;
+    ws[cCAP].s = {
+        font: fontBold
+    };
+    ws[`A${42 + numberOfUnits}`].s = {
+        font: fontBold
+    };
+
+    // Debt Service Cover Ratio
+    ws[cDebtService].z = '0.000';
+    ws[cDebtService].f = `${cNOI}/${cMortgagePrincipal}`;
+    ws[cDebtService].s = {
+        font: fontBold
+    };
+    ws[`A${44 + numberOfUnits}`].s = {
+        font: fontBold
+    };
 }
 
 
