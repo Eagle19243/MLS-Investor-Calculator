@@ -14,6 +14,8 @@ function initEventHandler() {
         $('.popup-container').css('display', 'none');
     });
     $('#analytics_equity_percent').on('change', onEquityPercentChange);
+    $('#analytics_mortgage_interest').on('change', onMortgageInterestChange);
+    $('#analytics_mortgage_term').on('change', onMortgageTermChange);
     $('#analytics_vacancy_rate_percent').on('change', onVacancyRatePercentChange);
     $('#analytics_repairs_percent').on('change', onRepairsPercentChange);
     $('#analytics_management_percent').on('change', onManagementPercentChange);
@@ -27,6 +29,31 @@ function onEquityPercentChange(evt, newValue) {
     } else {
         $(evt.target).html(`${percent}%`);
         $('#analytics_mortgage_percent').html(`${100 - percent}%`);
+        populateValues(true);
+    }
+
+    return true;
+}
+
+function onMortgageInterestChange(evt, newValue) {
+    const percent = getPercentNum(newValue);
+
+    if (!percent) {
+        return false;
+    } else {
+        $(evt.target).html(`${percent}%`);
+        populateValues(true);
+    }
+
+    return true;
+}
+
+function onMortgageTermChange(evt, newValue) {
+    const value = Number(newValue);
+
+    if (!value) {
+        return false;
+    } else {
         populateValues(true);
     }
 
@@ -957,7 +984,7 @@ function setFormulas(ws) {
 
     // Monthly PI Payment
     ws[cMonthlyPI].z = formatCurrencyWithDec;
-    ws[cMonthlyPI].f = `((((1+(${cMortgageInterest}/12))^(${cMortgageTerm}*12))*(${cMortgageInterest}/12))/(((1+(${cMortgageInterest}/12))^(${cMortgageTerm}*12))-1))*${cMortgageValue}`;
+    ws[cMonthlyPI].f = `((((1+(${cMortgageInterestRage}/12))^(${cMortgageTerm}*12))*(${cMortgageInterestRage}/12))/(((1+(${cMortgageInterestRage}/12))^(${cMortgageTerm}*12))-1))*${cMortgageValue}`;
     ws[cMonthlyPI].s = {
         font: fontBold
     };
