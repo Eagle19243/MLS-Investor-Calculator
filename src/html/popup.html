@@ -43,14 +43,14 @@
                             <tr></tr>
                             <tr>
                                 <td readonly>Mortgage Interest Rage</td>
-                                <td class="text-right bg-purple">5.000%</td>
+                                <td class="text-right bg-purple" id="analytics_mortgage_interest">5%</td>
                                 <td readonly></td>
                                 <td readonly></td>
                                 <td readonly></td>
                             </tr>
                             <tr>
                                 <td readonly>Mortgage Term - years</td>
-                                <td class="text-right bg-purple">25</td>
+                                <td class="text-right bg-purple" id="analytics_mortgage_term">25</td>
                                 <td readonly></td>
                                 <td readonly></td>
                                 <td readonly></td>
@@ -122,7 +122,7 @@
                             </tr>
                             <tr>
                                 <td class="thick-line-top font-weight-700" readonly>Net Rents</td>
-                                <td class="text-center thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top" readonly></td>
                                 <td class="text-right thick-line-top" readonly></td>
                                 <td class="text-right thick-line-top" readonly></td>
                                 <td class="text-right thick-line-top font-weight-700" id="analytics_net_rents" readonly></td>
@@ -143,10 +143,10 @@
                             </tr>
                             <tr>
                                 <td readonly>Heating</td>
-                                <td class="text-center"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right" id="analytics_heating"></td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" id="analytics_heating" readonly></td>
                             </tr>
                             <tr>
                                 <td>Gas</td>
@@ -157,21 +157,21 @@
                             </tr>
                             <tr>
                                 <td readonly>Electricity</td>
-                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" id="analytics_electricity" readonly></td>
                             </tr>
                             <tr>
                                 <td readonly>Water</td>
-                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" id="analytics_water" readonly></td>
                             </tr>
                             <tr>
                                 <td readonly>Repairs & Maintenance</td>
-                                <td class="text-center" readonly></td>
+                                <td class="text-right bg-purple" id="analytics_repairs_percent"></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" id="analytics_repairs" readonly></td>
@@ -199,7 +199,7 @@
                             </tr>
                             <tr>
                                 <td readonly>Management</td>
-                                <td class="text-center" readonly></td>
+                                <td class="text-right bg-purple" id="analytics_management_percent"></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" id="analytics_management" readonly></td>
@@ -219,11 +219,11 @@
                                 <td class="text-right" id="analytics_taxes" readonly></td>
                             </tr>
                             <tr>
-                                <td class="font-weight-700 text-center thick-line-top" readonly>Total Operating Expenses</td>
-                                <td class="text-center" readonly></td>
-                                <td class="text-right" readonly></td>
-                                <td class="text-right" readonly></td>
-                                <td class="text-right" id="analytics_total" readonly></td>
+                                <td class="thick-line-top font-weight-700" readonly>Total Operating Expenses</td>
+                                <td class="text-right thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top" readonly></td>
+                                <td class="text-right thick-line-top font-weight-700" id="analytics_total" readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
@@ -231,7 +231,7 @@
                                 <td class="text-center" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
-                                <td class="text-right" id="analytics_noi" readonly></td>
+                                <td class="text-right font-weight-700" id="analytics_noi" readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
@@ -239,7 +239,14 @@
                                 <td class="text-center" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
-                                <td class="text-right" id="analytics_mortgage_principal" readonly></td>
+                                <td class="text-right font-weight-700" id="analytics_mortgage_principal" readonly></td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-700" readonly>Monthly PI Payment</td>
+                                <td class="text-center" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right" readonly></td>
+                                <td class="text-right font-weight-700" id="analytics_monthly_pi" readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
@@ -247,26 +254,26 @@
                                 <td class="text-center" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
-                                <td class="text-right" id="analytics_net_cashflow" readonly></td>
+                                <td class="text-right font-weight-700" id="analytics_net_cashflow" readonly></td>
                             </tr>
                             <tr>
                                 <td class="font-weight-700" readonly>Cash on Cash Return</td>
                                 <td class="text-center" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
-                                <td class="text-right" id="analytics_cash" readonly></td>
+                                <td class="text-right font-weight-700" id="analytics_cash" readonly></td>
                             </tr>
                             <tr>
                                 <td class="font-weight-700" readonly>CAP</td>
                                 <td class="text-center" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
-                                <td class="text-right" id="analytics_cap" readonly></td>
+                                <td class="text-right font-weight-700" id="analytics_cap" readonly></td>
                             </tr>
                             <tr></tr>
                             <tr>
-                                <td class="font-weight-700" readonly>Debt Service Cover Ratio</td>
-                                <td class="text-left" id="analytics_debt_service" readonly></td>
+                                <td class="font-weight-700 font-weight-700" readonly>Debt Service Cover Ratio</td>
+                                <td class="text-right font-weight-700" id="analytics_debt_service" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>
                                 <td class="text-right" readonly></td>

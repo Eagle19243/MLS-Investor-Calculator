@@ -3,7 +3,7 @@ init();
 async function init() {
     await preparePopup();
     showPopup();
-    populateValues();
+    populateValues(false);
     initEventHandler();
 }
 
@@ -15,6 +15,8 @@ function initEventHandler() {
     });
     $('#analytics_equity_percent').on('change', onEquityPercentChange);
     $('#analytics_vacancy_rate_percent').on('change', onVacancyRatePercentChange);
+    $('#analytics_repairs_percent').on('change', onRepairsPercentChange);
+    $('#analytics_management_percent').on('change', onManagementPercentChange);
 }
 
 function onEquityPercentChange(evt, newValue) {
@@ -25,8 +27,7 @@ function onEquityPercentChange(evt, newValue) {
     } else {
         $(evt.target).html(`${percent}%`);
         $('#analytics_mortgage_percent').html(`${100 - percent}%`);
-        $('#analytics_equity').html(formatNumberCurrency(getEquity()));
-        $('#analytics_mortgage').html(formatNumberCurrency(getMortgage()));
+        populateValues(true);
     }
 
     return true;
@@ -39,8 +40,33 @@ function onVacancyRatePercentChange(evt, newValue) {
         return false;
     } else {
         $(evt.target).html(`${percent}%`);
-        $('#analytics_vacancy_rate').html(formatNumberCurrencyWithDec(getVacancyRate()));
-        $('#analytics_net_rents').html(formatNumberCurrency(getNetRents()));
+        populateValues(true);
+    }
+
+    return true;
+}
+
+function onRepairsPercentChange(evt, newValue) {
+    const percent = getPercentNum(newValue);
+
+    if (!percent) {
+        return false;
+    } else {
+        $(evt.target).html(`${percent}%`);
+        populateValues(true);
+    }
+
+    return true;
+}
+
+function onManagementPercentChange(evt, newValue) {
+    const percent = getPercentNum(newValue);
+
+    if (!percent) {
+        return false;
+    } else {
+        $(evt.target).html(`${percent}%`);
+        populateValues(true);
     }
 
     return true;
@@ -123,7 +149,7 @@ function showPopup() {
     $('#mls_popup').modal('show');
 }
 
-function populateValues() {
+function populateValues(reCalc) {
     $('.label-analytics').html(getSubjectPropertyAddress());
     $('#analytics_list_price').html(formatNumberCurrency(getListPriceNumValue()));
     $('#analytics_equity').html(formatNumberCurrency(getEquity()));
@@ -136,26 +162,28 @@ function populateValues() {
     $('#analytics_unit_total_baths').html(getUnitTotalBaths());
     $('#analytics_unit_total_current').html(getUnitTotalCurrent());
 
-    $('#analytics_heating').html(formatNumberCurrency(getHeating()));
-    $('#analytics_gas').html(formatNumberCurrency(getGas()));
-    $('#analytics_electricity').html(formatNumberCurrency(getElectricity()));
-    $('#analytics_water').html(formatNumberCurrency(getWater()));
-    $('#analytics_repairs').html(formatNumberCurrency(getRepairs()));
-    $('#analytics_trash').html(formatNumberCurrency(getTrash()));
-    $('#analytics_sewer').html(formatNumberCurrency(getSewer()));
-    $('#analytics_insurance').html(formatNumberCurrency(getInsurance()));
-    $('#analytics_management').html(formatNumberCurrency(getManagement()));
-    $('#analytics_miscellaneous').html(formatNumberCurrency(getMiscellaneous()));
-    $('#analytics_taxes').html(formatNumberCurrency(getTaxes()));
-    $('#analytics_total').html(formatNumberCurrency(getTotalExpenses()));
-    
     $('#analytics_gross_rents_mls').html(formatNumberCurrencyWithDec(getGrossRentsMLS()));
     $('#analytics_gross_rents_addition').html(formatNumberCurrencyWithDec(getGrossRentsAddition()));
     $('#analytics_vacancy_rate').html(formatNumberCurrencyWithDec(getVacancyRate()));
     $('#analytics_net_rents').html(formatNumberCurrency(getNetRents()));
-    $('#analytics_noi').html(getNOI());
-    $('#analytics_mortgage_principal').html(getMortgagePrincipal());
-    $('#analytics_net_cashflow').html(getNetCashflow());
+    
+    $('#analytics_heating').html(formatNumberCurrencyWithDec(getHeating()));
+    $('#analytics_gas').html(formatNumberCurrencyWithDec(getGas()));
+    $('#analytics_electricity').html(formatNumberCurrencyWithDec(getElectricity()));
+    $('#analytics_water').html(formatNumberCurrencyWithDec(getWater()));
+    $('#analytics_repairs').html(formatNumberCurrencyWithDec(getRepairs()));
+    $('#analytics_trash').html(formatNumberCurrencyWithDec(getTrash()));
+    $('#analytics_sewer').html(formatNumberCurrencyWithDec(getSewer()));
+    $('#analytics_insurance').html(formatNumberCurrencyWithDec(getInsurance()));
+    $('#analytics_management').html(formatNumberCurrencyWithDec(getManagement()));
+    $('#analytics_miscellaneous').html(formatNumberCurrencyWithDec(getMiscellaneous()));
+    $('#analytics_taxes').html(formatNumberCurrencyWithDec(getTaxes()));
+    $('#analytics_total').html(formatNumberCurrencyWithDec(getTotalExpenses()));
+
+    $('#analytics_noi').html(formatNumberCurrencyWithDec(getNOI()));
+    $('#analytics_mortgage_principal').html(formatNumberCurrencyWithDec(getMortgagePrincipal()));
+    $('#analytics_monthly_pi').html(formatNumberCurrencyWithDec(getMonthlyPI()));
+    $('#analytics_net_cashflow').html(formatNumberCurrencyWithDec(getNetCashflow()));
     $('#analytics_cash').html(getCash());
     $('#analytics_cap').html(getCAP());
     $('#analytics_debt_service').html(getDebtService());
@@ -174,7 +202,46 @@ function populateValues() {
             $(`#analytics_unit_${i + 1}_current`).addClass('thick-outside-box');
             $(`#analytics_unit_${i + 1}_beds`).parent().addClass('bg-yellow');
         }
-    }   
+    }
+
+    if (!reCalc) {
+        if (Number(getHeating()) === 0) {
+            $('#analytics_heating').addClass('bg-yellow thick-outside-box');
+        }
+
+        if (Number(getGas()) === 0) {
+            $('#analytics_gas').addClass('bg-yellow thick-outside-box');
+        }
+
+        if (Number(getElectricity()) === 0) {
+            $('#analytics_electricity').addClass('bg-yellow thick-outside-box');
+        }
+
+        if (Number(getWater()) === 0) {
+            $('#analytics_water').addClass('bg-yellow thick-outside-box');
+        }
+
+        if (Number(getTrash()) === 0) {
+            $('#analytics_trash').addClass('bg-yellow thick-outside-box');
+        }
+
+        if (Number(getSewer()) === 0) {
+            $('#analytics_sewer').addClass('bg-yellow thick-outside-box');
+        }
+
+        if (Number(getInsurance()) === 0) {
+            $('#analytics_insurance').addClass('bg-yellow thick-outside-box');
+        }
+
+        if (Number(getMiscellaneous()) === 0) {
+            $('#analytics_miscellaneous').addClass('bg-yellow thick-outside-box');
+        }
+
+        if (Number(getTaxes()) === 0) {
+            $('#analytics_taxes').addClass('bg-yellow thick-outside-box');
+        }
+
+    }
 }
 
 function getMLSNumber() {
@@ -233,7 +300,6 @@ function getMortgage() {
 }
 
 function getHeating() {
-    let value = 0;
     let content = '';
 
     if (getURLType() == 0) {
@@ -241,15 +307,13 @@ function getHeating() {
     } 
 
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
+        content = content.substr(1, content.length - 1);
     }
 
-    return value.toFixed(2);
+    return content;
 }
 
 function getGas() {
-
-    let value = 0;
     let content = '';
 
     if (getURLType() == 0) {
@@ -257,14 +321,13 @@ function getGas() {
     }
     
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
+        content = content.substr(1, content.length - 1);
     }
 
-    return value.toFixed(2);
+    return content;
 }
 
 function getElectricity() {
-    let value = 0;
     let content = '';
 
     if (getURLType() == 0) {
@@ -272,14 +335,13 @@ function getElectricity() {
     }
     
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
+        content = content.substr(1, content.length - 1);
     }
 
-    return value.toFixed(2);
+    return content;
 }
 
 function getWater() {
-    let value = 0;
     let content = '';
 
     if (getURLType() == 0) {
@@ -287,29 +349,17 @@ function getWater() {
     }
     
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
+        content = content.substr(1, content.length - 1);
     }
 
-    return value.toFixed(2);
+    return content;
 }
 
 function getRepairs() {
-    let value = 0;
-    let content = '';
-
-    if (getURLType() == 0) {
-        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(2) > b').html().trim();
-    }
-    
-    if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
-    }
-
-    return value.toFixed(2);
+    return getNetRents() * getPercentNum($('#analytics_repairs_percent').html()) / 100;
 }
 
 function getTrash() {
-    let value   = '';
     let content = '';
 
     if (getURLType() == 0) {
@@ -317,14 +367,13 @@ function getTrash() {
     }
 
     if (content.length > 0) {
-        value = content.substr(1, content.length - 1);
+        content = content.substr(1, content.length - 1);
     }
 
-    return (value.length === 0) ? '0.00' : value;
+    return content;
 }
 
 function getSewer() {
-    let value = 0;
     let content = '';
 
     if (getURLType() == 0) {
@@ -332,14 +381,13 @@ function getSewer() {
     }
     
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
+        content = content.substr(1, content.length - 1);
     }
 
-    return value.toFixed(2);
+    return content;
 }
 
 function getInsurance() {
-    let value = 0;
     let content = '';
 
     if (getURLType() == 0) {
@@ -347,29 +395,17 @@ function getInsurance() {
     }
     
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
+        content = content.substr(1, content.length - 1);
     }
 
-    return value.toFixed(2);
+    return content;
 }
 
 function getManagement() {
-    let value = 0;
-    let content = '';
-
-    if (getURLType() == 0) {
-        content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(3) > b').html().trim();
-    }
-    
-    if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
-    }
-
-    return value.toFixed(2);
+    return getNetRents() * getPercentNum($('#analytics_management_percent').html()) / 100;
 }
 
 function getMiscellaneous() {
-    let value = 0;
     let content = '';
 
     if (getURLType() == 0) {
@@ -377,14 +413,13 @@ function getMiscellaneous() {
     }
     
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1));
+        content = content.substr(1, content.length - 1);
     }
 
-    return value.toFixed(2);
+    return content;
 }
 
 function getTaxes() {
-    let value = 0;
     let content = '';
 
     if (getURLType() == 0) {
@@ -394,10 +429,10 @@ function getTaxes() {
     }
     
     if (content.length > 0) {
-        value = Number(content.substr(1, content.length - 1).replace(/,/g, ''));
+        content = content.substr(1, content.length - 1).replace(/,/g, '');
     }
 
-    return value.toFixed(2);
+    return content;
 }
 
 function getTotalExpenses() {
@@ -405,7 +440,7 @@ function getTotalExpenses() {
         Number(getWater()) + Number(getRepairs()) + Number(getTrash()) + Number(getSewer()) +
         Number(getInsurance()) + Number(getManagement()) + Number(getMiscellaneous()) + Number(getTaxes());
 
-    return (total === 0) ? '0.00' : total.toFixed(2);
+    return total;
 }
 
 function getBedsForUnit(index) {
@@ -574,19 +609,32 @@ function getNetRents() {
 }
 
 function getNOI() {
-    return 0;
+    return getNetRents() - getTotalExpenses();
 }
 
 function getMortgagePrincipal() {
-    return 0;
+    return getMonthlyPI() * 12;
+}
+
+function getMonthlyPI() {
+    const mortgageInterest = getPercentNum($('#analytics_mortgage_interest').html()) / 100;
+    const mortgageTerm = Number($('#analytics_mortgage_term').html());
+    const tmpValue1 = mortgageInterest / 12 ;
+    const tmpValue2 = Math.pow((1 + tmpValue1), mortgageTerm * 12);
+
+    return (tmpValue2 * tmpValue1) / (tmpValue2 - 1) * getMortgage();
 }
 
 function getNetCashflow() {
-    return (getNOI() - getMortgagePrincipal()).toFixed(2);
+    return getNOI() - getMortgagePrincipal();
 }
 
 function getCash() {
-    return (getNetCashflow() / 1).toFixed(2);
+    if (getEquity() === 0) {
+        return '';
+    }
+
+    return (getNetCashflow() / getEquity()).toFixed(2) + '%';
 }
 
 function getCAP() {
@@ -594,7 +642,7 @@ function getCAP() {
         return '';
     }
 
-    return (getNOI() / getListPriceNumValue()).toFixed(2);
+    return (getNOI() / getListPriceNumValue()).toFixed(2) + '%';
 }
 
 function getDebtService() {
@@ -602,11 +650,11 @@ function getDebtService() {
         return '';
     }
 
-    return (getNOI() / getMortgagePrincipal()).toFixed(2);
+    return (getNOI() / getMortgagePrincipal()).toFixed(3);
 }
 
 function formatNumberCurrency(num) {
-    return '$' + parseInt(num).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    return '$' + Math.floor(num).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
 
 function formatNumberCurrencyWithDec(num) {
@@ -717,7 +765,7 @@ function setFormulas(ws) {
     // Mortgage Interest Rage
     ws[cMortgageInterestRage].z = formatPercent;
     ws[cMortgageInterestRage].s = { fill: bgPurple };
-    
+
     // Mortgage Term -years
     ws[cMortgageTerm].s = { fill: bgPurple };
 
