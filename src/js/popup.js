@@ -693,7 +693,7 @@ function exportToXLS() {
     const ws = XLSX.utils.table_to_sheet(document.getElementById('table_analytics'));
     setFormulas(ws);
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `${getMLSNumber()}.xlsx`);
+    XLSX.writeFile(wb, `${getMLSNumber()}.xlsx`, {cellStyles: true});
 }
 
 function contactToAgent() {
@@ -748,27 +748,6 @@ function setFormulas(ws) {
     const cCashOnCashReturn     = `E${41 + numberOfUnits}`;
     const cCAP                  = `E${42 + numberOfUnits}`;
     const cDebtService          = `B${44 + numberOfUnits}`;
-
-    const bgPurple              = {
-        patternType: 'solid',
-        bgColor: { argb: 'FFCE93D8' }
-    };
-    const bgYellow              = {
-        patternType: 'solid',
-        bgColor: { argb: 'FFFFFF00' }
-    };
-    const borderOutsideBox      = {
-        top: {style: "thin", color: {auto: 1}},
-		right: {style: "thin", color: {auto: 1}},
-		bottom: {style: "thin", color: {auto: 1}},
-		left: {style: "thin", color: {auto: 1}}
-    };
-    const borderTop             = {
-        top: {style: "thin", color: {auto: 1}}
-    };
-    const fontBold              = {
-        bold: true
-    };
     const formatCurrency        = '$#,##0';
     const formatCurrencyWithDec = '$#,##0.00';
     const formatPercent         = '0%';
@@ -781,21 +760,21 @@ function setFormulas(ws) {
     ws[cEquityValue].z     = formatCurrency;
     ws[cEquityValue].f     = `${cListPrice}*${cEquityPercent}`;
     ws[cEquityPercent].z   = formatPercent;
-    ws[cEquityPercent].s   = { fill: bgPurple };
+    ws[cEquityPercent].s   = { fgColor: { rgb: 'CE93D8' } };
 
     // Mortgage
     ws[cMortgageValue].z   = formatCurrency;
     ws[cMortgageValue].f   = `${cListPrice}-${cEquityValue}`;
     ws[cMortgagePercent].f = `1-${cEquityPercent}`;
     ws[cMortgagePercent].z = formatPercent;
-    ws[cMortgagePercent].s = { fill: bgPurple };
+    ws[cMortgagePercent].s = { fgColor: { rgb: 'CE93D8' } };
 
     // Mortgage Interest Rage
     ws[cMortgageInterestRage].z = formatPercent;
-    ws[cMortgageInterestRage].s = { fill: bgPurple };
+    ws[cMortgageInterestRage].s = { fgColor: { rgb: 'CE93D8' } };
 
     // Mortgage Term -years
-    ws[cMortgageTerm].s = { fill: bgPurple };
+    ws[cMortgageTerm].s = { fgColor: { rgb: 'CE93D8' } };
 
     // Price per unit
     ws[cPricePerUnit].z = formatCurrency;
@@ -808,38 +787,43 @@ function setFormulas(ws) {
         const cCurrent  = ws[`E${14 + i}`];
 
         if (cBeds.v.length === 0 && cBBaths.v.length === 0 && cCurrent.v.length === 0) {
-            ws[`A${14 + i}`].s = { fill: bgYellow };
-            ws[`B${14 + i}`].s = { fill: bgYellow };
-            ws[`C${14 + i}`].s = { fill: bgYellow, border: borderOutsideBox };
-            ws[`D${14 + i}`].s = { fill: bgYellow, border: borderOutsideBox };
-            ws[`E${14 + i}`].s = { fill: bgYellow, border: borderOutsideBox };
+            ws[`A${14 + i}`].s = { fgColor: { rgb: 'FFFF00' } };
+            ws[`B${14 + i}`].s = { fgColor: { rgb: 'FFFF00' } };
+            ws[`C${14 + i}`].s = {
+                fgColor: { rgb: 'FFFF00' },
+                top: {style: "medium", color: {rgb: 0x000000}},
+                right: {style: "medium", color: {rgb: 0x000000}},
+                bottom: {style: "medium", color: {rgb: 0x000000}},
+                left: {style: "medium", color: {rgb: 0x000000}}
+            };
+            ws[`D${14 + i}`].s = {
+                fgColor: { rgb: 'FFFF00' },
+                top: {style: "medium", color: {rgb: 0x000000}},
+                right: {style: "medium", color: {rgb: 0x000000}},
+                bottom: {style: "medium", color: {rgb: 0x000000}},
+                left: {style: "medium", color: {rgb: 0x000000}}
+            };
+            ws[`E${14 + i}`].s = {
+                fgColor: { rgb: 'FFFF00' },
+                top: {style: "medium", color: {rgb: 0x000000}},
+                right: {style: "medium", color: {rgb: 0x000000}},
+                bottom: {style: "medium", color: {rgb: 0x000000}},
+                left: {style: "medium", color: {rgb: 0x000000}}
+            };
         }
     }
 
     // Total Beds
     ws[cTotalBeds].f = `SUM(C14:C${14 + numberOfUnits - 1})`;
-    ws[cTotalBeds].s = {
-        font    : fontBold,
-        border  : borderTop
-    };
-    ws[`A${14 + numberOfUnits}`].s = {
-        border: borderTop
-    };
-    ws[`B${14 + numberOfUnits}`].s = {
-        border: borderTop
-    };
+    ws[cTotalBeds].s = { bold: true, top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`A${14 + numberOfUnits}`].s = { top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`B${14 + numberOfUnits}`].s = { top: {style: "medium", color: {rgb: 0x000000}} };
     // Total Baths
     ws[cTotalBaths].f = `SUM(D14:D${14 + numberOfUnits - 1})`;
-    ws[cTotalBaths].s = {
-        font    : fontBold,
-        border  : borderTop
-    };
+    ws[cTotalBaths].s = { bold: true, top: {style: "medium", color: {rgb: 0x000000}} };
     // Total Current
     ws[cTotalCurrent].f = `SUM(E14:E${14 + numberOfUnits - 1})`;
-    ws[cTotalCurrent].s = {
-        font    : fontBold,
-        border  : borderTop
-    };
+    ws[cTotalCurrent].s = { bold: true, top: {style: "medium", color: {rgb: 0x000000}} };
 
     // Gross Rents from MLS
     ws[cGrossRentsMLS].z = formatCurrencyWithDec;
@@ -852,185 +836,187 @@ function setFormulas(ws) {
     ws[cVacancyRate].z = formatCurrencyWithDec;
     ws[cVacancyRate].f = `${cGrossRentsAddition}*${cVacancyRatePercent}`;
     ws[cVacancyRatePercent].z = formatPercent;
-    ws[cVacancyRatePercent].s = { fill: bgPurple };
+    ws[cVacancyRatePercent].s = { fgColor: { rgb: 'CE93D8' } };
     
     // Net Rents
     ws[cNetRents].z = formatCurrencyWithDec;
     ws[cNetRents].f = `${cGrossRentsAddition}-${cVacancyRate}`;
-    ws[cNetRents].s = {
-        font    : fontBold,
-        border  : borderTop
-    };
-    ws[`A${19 + numberOfUnits}`].s = {
-        font: fontBold,
-        border: borderTop
-    };
-    ws[`B${19 + numberOfUnits}`].s = {
-        border: borderTop
-    };
-    ws[`C${19 + numberOfUnits}`].s = {
-        border: borderTop
-    };
-    ws[`D${19 + numberOfUnits}`].s = {
-        border: borderTop
-    };
+    ws[cNetRents].s = { bold: true, top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`A${19 + numberOfUnits}`].s = { bold: true, top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`B${19 + numberOfUnits}`].s = { top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`C${19 + numberOfUnits}`].s = { top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`D${19 + numberOfUnits}`].s = { top: {style: "medium", color: {rgb: 0x000000}} };
 
     // Heating
     ws[cHeating].z = formatCurrencyWithDec;
     if (ws[cHeating].v === '$0.00') {
-        ws[cHeating].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cHeating].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
 
     // Gas
     ws[cGas].z = formatCurrencyWithDec;
     if (ws[cGas].v === '$0.00') {
-        ws[cGas].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cGas].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
 
     // Electricity
     ws[cElectricity].z = formatCurrencyWithDec;
     if (ws[cElectricity].v === '$0.00') {
-        ws[cElectricity].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cElectricity].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
 
     // Water
     ws[cWater].z = formatCurrencyWithDec;
     if (ws[cWater].v === '$0.00') {
-        ws[cWater].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cWater].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
 
     // Repairs & Maintenance
     ws[cRepair].z = formatCurrencyWithDec;
     ws[cRepair].f = `${cRepairPercent}*${cNetRents}`;
     ws[cRepairPercent].z = formatPercent;
-    ws[cRepairPercent].s = { fill: bgPurple };
+    ws[cRepairPercent].s = { fgColor: { rgb: 'CE93D8' } };
 
     // Trash Removal
     ws[cTrashRemoval].z = formatCurrencyWithDec;
     if (ws[cTrashRemoval].v === '$0.00') {
-        ws[cTrashRemoval].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cTrashRemoval].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
 
     // Sewer
     ws[cSewer].z = formatCurrencyWithDec;
     if (ws[cSewer].v === '$0.00') {
-        ws[cSewer].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cSewer].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
 
     // Insurance
     ws[cInsurance].z = formatCurrencyWithDec;
     if (ws[cInsurance].v === '$0.00') {
-        ws[cInsurance].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cInsurance].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
 
     // Repairs & Maintenance
     ws[cManagement].z = formatCurrencyWithDec;
     ws[cManagement].f = `${cManagementPercent}*${cNetRents}`;
     ws[cManagementPercent].z = formatPercent;
-    ws[cManagementPercent].s = { fill: bgPurple };
+    ws[cManagementPercent].s = { fgColor: { rgb: 'CE93D8' } };
 
     // Miscellaneous
     ws[cMiscellaneous].z = formatCurrencyWithDec;
     if (ws[cMiscellaneous].v === '$0.00') {
-        ws[cMiscellaneous].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cMiscellaneous].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
 
     // Taxes
     ws[cTaxes].z = formatCurrencyWithDec;
     if (ws[cTaxes].v === '$0.00') {
-        ws[cTaxes].s = { fill: bgYellow, border: borderOutsideBox };
+        ws[cTaxes].s = {
+            fgColor: { rgb: 'FFFF00' },
+            top: {style: "medium", color: {rgb: 0x000000}},
+            right: {style: "medium", color: {rgb: 0x000000}},
+            bottom: {style: "medium", color: {rgb: 0x000000}},
+            left: {style: "medium", color: {rgb: 0x000000}}
+        };
     }
     
     // Total Operating Expenses
     ws[cTotalExpenses].z = formatCurrencyWithDec;
     ws[cTotalExpenses].f = `SUM(${cHeating}:${cTaxes})`;
-    ws[cTotalExpenses].s = {
-        font: fontBold,
-        border: borderTop
-    };
-    ws[`A${33 + numberOfUnits}`].s = {
-        font: fontBold,
-        border: borderTop
-    };
-    ws[`B${33 + numberOfUnits}`].s = {
-        border: borderTop
-    };
-    ws[`C${33 + numberOfUnits}`].s = {
-        border: borderTop
-    };
-    ws[`D${33 + numberOfUnits}`].s = {
-        border: borderTop
-    };
+    ws[cTotalExpenses].s = { bold: true, top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`A${33 + numberOfUnits}`].s = { bold: true, top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`B${33 + numberOfUnits}`].s = { top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`C${33 + numberOfUnits}`].s = { top: {style: "medium", color: {rgb: 0x000000}} };
+    ws[`D${33 + numberOfUnits}`].s = { top: {style: "medium", color: {rgb: 0x000000}} };
 
     // Net Operating Income(NOI)
     ws[cNOI].z = formatCurrencyWithDec;
     ws[cNOI].f = `${cNetRents}-${cTotalExpenses}`;
-    ws[cNOI].s = {
-        font: fontBold
-    };
-    ws[`A${35 + numberOfUnits}`].s = {
-        font: fontBold
-    };
+    ws[cNOI].s = { bold: true };
+    ws[`A${35 + numberOfUnits}`].s = { bold: true };
 
     // Mortgage Principal & Interest
     ws[cMortgagePrincipal].z = formatCurrencyWithDec;
     ws[cMortgagePrincipal].f = `${cMonthlyPI}*12`;
-    ws[cMortgagePrincipal].s = {
-        font: fontBold
-    };
-    ws[`A${37 + numberOfUnits}`].s = {
-        font: fontBold
-    };
+    ws[cMortgagePrincipal].s = { bold: true };
+    ws[`A${37 + numberOfUnits}`].s = { bold: true };
 
     // Monthly PI Payment
     ws[cMonthlyPI].z = formatCurrencyWithDec;
     ws[cMonthlyPI].f = `((((1+(${cMortgageInterestRage}/12))^(${cMortgageTerm}*12))*(${cMortgageInterestRage}/12))/(((1+(${cMortgageInterestRage}/12))^(${cMortgageTerm}*12))-1))*${cMortgageValue}`;
-    ws[cMonthlyPI].s = {
-        font: fontBold
-    };
-    ws[`A${38 + numberOfUnits}`].s = {
-        font: fontBold
-    };
+    ws[cMonthlyPI].s = { bold: true };
+    ws[`A${38 + numberOfUnits}`].s = { bold: true };
 
     // Net Cashflow/ROI
     ws[cNetCashflow].z = formatCurrencyWithDec;
     ws[cNetCashflow].f = `${cNOI}-${cMortgagePrincipal}`;
-    ws[cNetCashflow].s = {
-        font: fontBold
-    };
-    ws[`A${40 + numberOfUnits}`].s = {
-        font: fontBold
-    };
+    ws[cNetCashflow].s = { bold: true };
+    ws[`A${40 + numberOfUnits}`].s = { bold: true };
 
     // Cash on Cash Return
     ws[cCashOnCashReturn].z = formatPercentWithDec;
     ws[cCashOnCashReturn].f = `${cNetCashflow}/${cEquityValue}`;
-    ws[cCashOnCashReturn].s = {
-        font: fontBold
-    };
-    ws[`A${41 + numberOfUnits}`].s = {
-        font: fontBold
-    };
+    ws[cCashOnCashReturn].s = { bold: true };
+    ws[`A${41 + numberOfUnits}`].s = { bold: true };
 
     // CAP
     ws[cCAP].z = formatPercentWithDec;
     ws[cCAP].f = `${cNOI}/${cListPrice}`;
-    ws[cCAP].s = {
-        font: fontBold
-    };
-    ws[`A${42 + numberOfUnits}`].s = {
-        font: fontBold
-    };
+    ws[cCAP].s = { bold: true };
+    ws[`A${42 + numberOfUnits}`].s = { bold: true };
 
     // Debt Service Cover Ratio
     ws[cDebtService].z = '0.000';
     ws[cDebtService].f = `${cNOI}/${cMortgagePrincipal}`;
-    ws[cDebtService].s = {
-        font: fontBold
-    };
-    ws[`A${44 + numberOfUnits}`].s = {
-        font: fontBold
-    };
+    ws[cDebtService].s = { bold: true };
+    ws[`A${44 + numberOfUnits}`].s = { bold: true };
 }
 
 
