@@ -693,7 +693,7 @@ function exportToXLS() {
     const ws = XLSX.utils.table_to_sheet(document.getElementById('table_analytics'));
     setFormulas(ws);
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `${getMLSNumber()}.xlsx`, {cellStyles: true});
+    XLSX.writeFile(wb, `${getMLSNumber()}.xlsx`, {cellStyles: true, sheetStubs: true});
 }
 
 function contactToAgent() {
@@ -849,7 +849,7 @@ function setFormulas(ws) {
 
     // Heating
     ws[cHeating].z = formatCurrencyWithDec;
-    if (ws[cHeating].v === '$0.00') {
+    if (ws[cHeating].v === 0) {
         ws[cHeating].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
@@ -861,7 +861,7 @@ function setFormulas(ws) {
 
     // Gas
     ws[cGas].z = formatCurrencyWithDec;
-    if (ws[cGas].v === '$0.00') {
+    if (ws[cGas].v === 0) {
         ws[cGas].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
@@ -873,7 +873,7 @@ function setFormulas(ws) {
 
     // Electricity
     ws[cElectricity].z = formatCurrencyWithDec;
-    if (ws[cElectricity].v === '$0.00') {
+    if (ws[cElectricity].v === 0) {
         ws[cElectricity].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
@@ -885,7 +885,7 @@ function setFormulas(ws) {
 
     // Water
     ws[cWater].z = formatCurrencyWithDec;
-    if (ws[cWater].v === '$0.00') {
+    if (ws[cWater].v === 0) {
         ws[cWater].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
@@ -903,7 +903,7 @@ function setFormulas(ws) {
 
     // Trash Removal
     ws[cTrashRemoval].z = formatCurrencyWithDec;
-    if (ws[cTrashRemoval].v === '$0.00') {
+    if (ws[cTrashRemoval].v === 0) {
         ws[cTrashRemoval].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
@@ -915,7 +915,7 @@ function setFormulas(ws) {
 
     // Sewer
     ws[cSewer].z = formatCurrencyWithDec;
-    if (ws[cSewer].v === '$0.00') {
+    if (ws[cSewer].v === 0) {
         ws[cSewer].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
@@ -927,7 +927,7 @@ function setFormulas(ws) {
 
     // Insurance
     ws[cInsurance].z = formatCurrencyWithDec;
-    if (ws[cInsurance].v === '$0.00') {
+    if (ws[cInsurance].v === 0) {
         ws[cInsurance].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
@@ -945,7 +945,7 @@ function setFormulas(ws) {
 
     // Miscellaneous
     ws[cMiscellaneous].z = formatCurrencyWithDec;
-    if (ws[cMiscellaneous].v === '$0.00') {
+    if (ws[cMiscellaneous].v === 0) {
         ws[cMiscellaneous].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
@@ -957,7 +957,7 @@ function setFormulas(ws) {
 
     // Taxes
     ws[cTaxes].z = formatCurrencyWithDec;
-    if (ws[cTaxes].v === '$0.00') {
+    if (ws[cTaxes].v === 0) {
         ws[cTaxes].s = {
             fgColor: { rgb: 'FFFF00' },
             top: {style: "medium", color: {rgb: 0x000000}},
