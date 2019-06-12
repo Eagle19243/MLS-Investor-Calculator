@@ -19,12 +19,46 @@ function initEventHandler() {
     $('#analytics_vacancy_rate_percent').on('change', onVacancyRatePercentChange);
     $('#analytics_repairs_percent').on('change', onRepairsPercentChange);
     $('#analytics_management_percent').on('change', onManagementPercentChange);
+    $('#analytics_list_price').on('change', onListPriceChange);
+}
+
+function onListPriceChange(evt, newValue) {
+    if (isNaN(newValue)) {
+        return false;
+    } else {
+        $(evt.target).html(formatNumberCurrency(Number(newValue)));
+        populateValues(true);
+    }
+
+    return true;
+}
+
+function onUnitChange(evt, newValue) {
+    if (isNaN(newValue)) {
+        return false;
+    } else {
+        $(evt.target).html(newValue);
+        populateValues(true);
+    }
+
+    return true;
+}
+
+function onExpensesChange(evt, newValue) {
+    if (isNaN(newValue)) {
+        return false;
+    } else {
+        $(evt.target).html(formatNumberCurrency(Number(newValue)));
+        populateValues(true);
+    }
+
+    return true;
 }
 
 function onEquityPercentChange(evt, newValue) {
     const percent = getPercentNum(newValue);
 
-    if (!percent) {
+    if (!percent && percent !== 0) {
         return false;
     } else {
         $(evt.target).html(`${percent}%`);
@@ -38,7 +72,7 @@ function onEquityPercentChange(evt, newValue) {
 function onMortgageInterestChange(evt, newValue) {
     const percent = getPercentNum(newValue);
 
-    if (!percent) {
+    if (!percent && percent !== 0) {
         return false;
     } else {
         $(evt.target).html(`${percent}%`);
@@ -51,7 +85,7 @@ function onMortgageInterestChange(evt, newValue) {
 function onMortgageTermChange(evt, newValue) {
     const value = Number(newValue);
 
-    if (!value) {
+    if (!value && value !== 0) {
         return false;
     } else {
         populateValues(true);
@@ -63,7 +97,7 @@ function onMortgageTermChange(evt, newValue) {
 function onVacancyRatePercentChange(evt, newValue) {
     const percent = getPercentNum(newValue);
 
-    if (!percent) {
+    if (!percent && percent !== 0) {
         return false;
     } else {
         $(evt.target).html(`${percent}%`);
@@ -76,7 +110,7 @@ function onVacancyRatePercentChange(evt, newValue) {
 function onRepairsPercentChange(evt, newValue) {
     const percent = getPercentNum(newValue);
 
-    if (!percent) {
+    if (!percent && percent !== 0) {
         return false;
     } else {
         $(evt.target).html(`${percent}%`);
@@ -89,7 +123,7 @@ function onRepairsPercentChange(evt, newValue) {
 function onManagementPercentChange(evt, newValue) {
     const percent = getPercentNum(newValue);
 
-    if (!percent) {
+    if (!percent && percent !== 0) {
         return false;
     } else {
         $(evt.target).html(`${percent}%`);
@@ -100,12 +134,20 @@ function onManagementPercentChange(evt, newValue) {
 }
 
 function getPercentNum(str) {
-    value = str.replace(/%/g, '');
+    let value = str.replace(/%/g, '');
     
-    if (isNaN(value)) {
+    if (isNaN(value) || (Number(value) > 100 || Number(value) < 0)) {
         return null;
-    } else if (Number(value) > 100 || Number(value) < 0) {
-        return null;
+    }
+
+    return parseInt(Number(value));
+}
+
+function getValuefromCurrency(str) {
+    let value = str.substr(1, str.length - 1).replace(/,/g, '');
+    
+    if (isNaN(value) || Number(value) <= 0) {
+        return 0;
     }
 
     return parseInt(Number(value));
@@ -145,7 +187,6 @@ function preparePopup() {
             popupContainer.load(popupHTMLPath, function(){
                 addUnitElements();
                 resolve();
-                $('#table_analytics').editableTableWidget();
             });
         }
     });
@@ -215,58 +256,84 @@ function populateValues(reCalc) {
     $('#analytics_cap').html(getCAP());
     $('#analytics_debt_service').html(getDebtService());
 
-    for (let i = 0; i < getNumberOfUnits(); i++) {
-        $(`#analytics_unit_${i + 1}_beds`).html(getBedsForUnit(i));
-        $(`#analytics_unit_${i + 1}_baths`).html(getBathsForUnit(i));
-        $(`#analytics_unit_${i + 1}_current`).html(getCurrentForUnit(i));
-
-        if (getBedsForUnit(i).length === 0 &&
-            getBathsForUnit(i).length === 0 &&
-            getCurrentForUnit(i).length === 0) {
-            
-            $(`#analytics_unit_${i + 1}_beds`).addClass('thick-outside-box');
-            $(`#analytics_unit_${i + 1}_baths`).addClass('thick-outside-box');
-            $(`#analytics_unit_${i + 1}_current`).addClass('thick-outside-box');
-            $(`#analytics_unit_${i + 1}_beds`).parent().addClass('bg-yellow');
-        }
-    }
-
     if (!reCalc) {
+        for (let i = 0; i < getNumberOfUnits(); i++) {
+            $(`#analytics_unit_${i + 1}_beds`).html(getBedsForUnit(i));
+            $(`#analytics_unit_${i + 1}_baths`).html(getBathsForUnit(i));
+            $(`#analytics_unit_${i + 1}_current`).html(getCurrentForUnit(i));
+    
+            if (getBedsForUnit(i).length === 0 &&
+                getBathsForUnit(i).length === 0 &&
+                getCurrentForUnit(i).length === 0) {
+                
+                $(`#analytics_unit_${i + 1}_beds`).addClass('thick-outside-box');
+                $(`#analytics_unit_${i + 1}_beds`).removeAttr('readonly');
+                $(`#analytics_unit_${i + 1}_baths`).addClass('thick-outside-box');
+                $(`#analytics_unit_${i + 1}_baths`).removeAttr('readonly');
+                $(`#analytics_unit_${i + 1}_current`).addClass('thick-outside-box');
+                $(`#analytics_unit_${i + 1}_current`).removeAttr('readonly');
+                $(`#analytics_unit_${i + 1}_beds`).parent().addClass('bg-yellow');
+
+                $(`#analytics_unit_${i + 1}_beds`).on('change', onUnitChange);
+                $(`#analytics_unit_${i + 1}_current`).on('change', onUnitChange);
+            }
+        }
+
         if (Number(getHeating()) === 0) {
             $('#analytics_heating').addClass('bg-yellow thick-outside-box');
+            $('#analytics_heating').removeAttr('readonly');
+            $('#analytics_heating').on('change', onExpensesChange);
         }
 
         if (Number(getGas()) === 0) {
             $('#analytics_gas').addClass('bg-yellow thick-outside-box');
+            $('#analytics_gas').removeAttr('readonly');
+            $('#analytics_gas').on('change', onExpensesChange);
         }
 
         if (Number(getElectricity()) === 0) {
             $('#analytics_electricity').addClass('bg-yellow thick-outside-box');
+            $('#analytics_electricity').removeAttr('readonly');
+            $('#analytics_electricity').on('change', onExpensesChange);
         }
 
         if (Number(getWater()) === 0) {
             $('#analytics_water').addClass('bg-yellow thick-outside-box');
+            $('#analytics_water').removeAttr('readonly');
+            $('#analytics_water').on('change', onExpensesChange);
         }
 
         if (Number(getTrash()) === 0) {
             $('#analytics_trash').addClass('bg-yellow thick-outside-box');
+            $('#analytics_trash').removeAttr('readonly');
+            $('#analytics_trash').on('change', onExpensesChange);
         }
 
         if (Number(getSewer()) === 0) {
             $('#analytics_sewer').addClass('bg-yellow thick-outside-box');
+            $('#analytics_sewer').removeAttr('readonly');
+            $('#analytics_sewer').on('change', onExpensesChange);
         }
 
         if (Number(getInsurance()) === 0) {
             $('#analytics_insurance').addClass('bg-yellow thick-outside-box');
+            $('#analytics_insurance').removeAttr('readonly');
+            $('#analytics_insurance').on('change', onExpensesChange);
         }
 
         if (Number(getMiscellaneous()) === 0) {
             $('#analytics_miscellaneous').addClass('bg-yellow thick-outside-box');
+            $('#analytics_miscellaneous').removeAttr('readonly');
+            $('#analytics_miscellaneous').on('change', onExpensesChange);
         }
 
         if (Number(getTaxes()) === 0) {
             $('#analytics_taxes').addClass('bg-yellow thick-outside-box');
+            $('#analytics_taxes').removeAttr('readonly');
+            $('#analytics_taxes').on('change', onExpensesChange);
         }
+
+        $('#table_analytics').editableTableWidget();
 
     }
 }
@@ -301,6 +368,11 @@ function getSubjectPropertyAddress() {
 
 function getListPriceNumValue() {
     let listPrice = '';
+    let lastValue = $('#analytics_list_price').html();
+    
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue);
+    }
 
     if (getURLType() == 0) {
         const listPriceContent = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(3) > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(2) > b').html();
@@ -328,6 +400,11 @@ function getMortgage() {
 
 function getHeating() {
     let content = '';
+    let lastValue = $('#analytics_heating').html();
+
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(1) > td:nth-child(1) > b').html().trim();
@@ -342,6 +419,11 @@ function getHeating() {
 
 function getGas() {
     let content = '';
+    let lastValue = $('#analytics_gas').html();
+    
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(1) > b').html().trim();
@@ -356,6 +438,11 @@ function getGas() {
 
 function getElectricity() {
     let content = '';
+    let lastValue = $('#analytics_electricity').html();
+
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(3) > td:nth-child(1) > b').html().trim();
@@ -370,6 +457,11 @@ function getElectricity() {
 
 function getWater() {
     let content = '';
+    let lastValue = $('#analytics_water').html();
+
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(4) > td:nth-child(1) > b').html().trim();
@@ -388,6 +480,11 @@ function getRepairs() {
 
 function getTrash() {
     let content = '';
+    let lastValue = $('#analytics_trash').html();
+
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(2) > b').html().trim();
@@ -402,6 +499,11 @@ function getTrash() {
 
 function getSewer() {
     let content = '';
+    let lastValue = $('#analytics_sewer').html();
+
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(3) > td:nth-child(2) > b').html().trim();
@@ -416,6 +518,11 @@ function getSewer() {
 
 function getInsurance() {
     let content = '';
+    let lastValue = $('#analytics_insurance').html();
+
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(4) > td:nth-child(2) > b').html().trim();
@@ -434,6 +541,11 @@ function getManagement() {
 
 function getMiscellaneous() {
     let content = '';
+    let lastValue = $('#analytics_miscellaneous').html();
+
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(3) > b').html().trim();
@@ -448,6 +560,11 @@ function getMiscellaneous() {
 
 function getTaxes() {
     let content = '';
+    let lastValue = $('#analytics_taxes').html();
+
+    if (lastValue !== '') {
+        return getValuefromCurrency(lastValue).toString();
+    }
 
     if (getURLType() == 0) {
         content = $('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(10) > tbody > tr > td:nth-child(3) > table:nth-child(4) > tbody > tr:nth-child(3) > td > b:nth-child(1)').html().trim();
@@ -473,6 +590,11 @@ function getTotalExpenses() {
 function getBedsForUnit(index) {
     let value   = '';
     let content = '';
+    let lastValue = $(`#analytics_unit_${index + 1}_beds`).html();
+
+    if (lastValue !== '') {
+        return lastValue;
+    }
 
     if (getURLType() == 0) {
         content = $($('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9)').find('td:contains("Bedrooms") > b')[index]);
@@ -494,6 +616,11 @@ function getBedsForUnit(index) {
 function getBathsForUnit(index) {
     let value   = '';
     let content = '';
+    let lastValue = $(`#analytics_unit_${index + 1}_baths`).html();
+
+    if (lastValue !== '') {
+        return lastValue;
+    }
 
     if (getURLType() == 0) {
         content = $($('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9)').find('td:contains("Baths") > b')[index]);
@@ -527,6 +654,11 @@ function getBathsForUnit(index) {
 function getCurrentForUnit(index) {
     let value   = '';
     let content = '';
+    let lastValue = $(`#analytics_unit_${index + 1}_current`).html();
+
+    if (lastValue !== '') {
+        return lastValue;
+    }
 
     if (getURLType() == 0) {
         content = $($('body > center:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(5) > table:nth-child(4) > tbody > tr > td > table:nth-child(9)').find('td:contains("Rent:") > b')[index]);
@@ -693,7 +825,7 @@ function exportToXLS() {
     const ws = XLSX.utils.table_to_sheet(document.getElementById('table_analytics'));
     setFormulas(ws);
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `${getMLSNumber()}.xlsx`, {cellStyles: true, sheetStubs: true});
+    XLSX.writeFile(wb, `${getSubjectPropertyAddress()}.xlsx`, {cellStyles: true, sheetStubs: true});
 }
 
 function contactToAgent() {
